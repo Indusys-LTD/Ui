@@ -11,6 +11,7 @@ from tabs.overview_tab import OverviewTab
 from tabs.sequence_tab import SequenceTab
 from tabs.ai_tab import AITab
 from tabs.database_tab import DatabaseTab
+from tabs.strategy_tab import StrategyTab
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -57,6 +58,10 @@ class MainWindow(QMainWindow):
             'trades_per_week': 2,
             'average_hold_time': 6
         })
+        
+        # Strategy tab
+        strategy_tab = StrategyTab()
+        self.central_widget.addTab(strategy_tab, "Strategy")
         
         # Sequence tab
         sequence_tab = SequenceTab()
