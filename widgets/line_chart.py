@@ -127,7 +127,7 @@ class LineChartWidget(BaseChartWidget):
         """Update the chart with new data
         
         Args:
-            x_data (list): List of x-axis values (dates)
+            x_data (list): List of x-axis values (dates as strings or datetime objects)
             y_data (list): List of lists containing y values for each line
             colors (list, optional): List of colors for each line
             bar_data (list, optional): List of values for bars
@@ -136,7 +136,13 @@ class LineChartWidget(BaseChartWidget):
         self.clear_plot()
         
         # Store data for tooltip
-        self.dates = [datetime.strptime(d, '%Y.%m.%d') for d in x_data]
+        self.dates = []
+        for d in x_data:
+            if isinstance(d, str):
+                self.dates.append(datetime.strptime(d, '%Y.%m.%d'))
+            else:
+                self.dates.append(d)
+                
         self.line_data = y_data
         self.bar_data = bar_data
         
@@ -169,28 +175,15 @@ class LineChartWidget(BaseChartWidget):
             # Plot line with increased width for visibility
             self.ax.plot(x_nums, data, color=color, linewidth=2, zorder=4)
             
-            # Add dots at each point and store references
-            scatter = self.ax.scatter(x_nums, data, color=color, s=30, zorder=5)
-            self.scatter_points.append(scatter)
-        
         # Format x-axis
         self.ax.xaxis.set_major_formatter(mdates.DateFormatter('%Y.%m.%d'))
+        self.ax.xaxis.set_major_locator(mdates.AutoDateLocator())
+        
+        # Rotate and align the tick labels so they look better
         plt.setp(self.ax.get_xticklabels(), rotation=45, ha='right')
         
-        # Set y-axis label if we have bar data
-        if bar_data is not None:
-            self.ax.set_ylabel('Profit/Loss & Total', color='#FFFFFF')
-            
-            # Ensure y-axis limits accommodate both bars and lines
-            ymin, ymax = self.ax.get_ylim()
-            margin = (ymax - ymin) * 0.1  # 10% margin
-            self.ax.set_ylim(ymin - margin, ymax + margin)
-        
-        # Set figure size and adjust layout
-        self.figure.set_size_inches(self.figure.get_size_inches())  # Maintain current size
-        self.figure.set_constrained_layout(True)  # Use constrained_layout instead of tight_layout
-        
-        self.canvas.draw()
+        # Update the display
+        self.canvas.draw_idle()
         
     def set_title(self, title):
         """Set the chart title"""
