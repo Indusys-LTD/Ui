@@ -1,225 +1,389 @@
-from PySide6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QGridLayout
-from PySide6.QtCore import QFile
-from PySide6.QtUiTools import QUiLoader
-from widgets import BarChartWidget, PieChartWidget, LineChartWidget
-import matplotlib.dates as mdates
-from datetime import datetime
+from PySide6.QtWidgets import (QWidget, QVBoxLayout, QHBoxLayout, QLabel, 
+                               QTableWidget, QTableWidgetItem, QHeaderView, QSplitter,
+                               QFrame, QComboBox, QPushButton)
+from PySide6.QtCore import Qt
+from PySide6.QtGui import QColor
+from widgets.line_chart import LineChartWidget
+import random
+from datetime import datetime, timedelta
 
 class ProfitLossTab(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.setup_ui()
+        self.load_sample_data()
         
     def setup_ui(self):
-        # Load UI
-        loader = QUiLoader()
-        ui_file = QFile("ui/profit_loss_tab.ui")
-        ui_file.open(QFile.ReadOnly)
-        self.tab_content = loader.load(ui_file)
-        ui_file.close()
+        main_layout = QVBoxLayout(self)
+        main_layout.setContentsMargins(10, 10, 10, 10)
+        main_layout.setSpacing(15)
         
-        # Add the loaded UI to this widget
-        layout = QVBoxLayout(self)
-        layout.addWidget(self.tab_content)
+        # Top Controls Section
+        top_layout = QHBoxLayout()
         
-        # Create chart container layouts
-        charts_layout = QGridLayout()
-        charts_layout.setSpacing(20)  # Increase spacing between charts
-        charts_layout.setContentsMargins(0, 10, 0, 10)  # Add vertical margins
-        self.tab_content.chart_container.setLayout(charts_layout)
+        # Summary Metrics Display
+        metrics_frame = QFrame()
+        metrics_frame.setStyleSheet("QFrame { background-color: #2D2D2D; border-radius: 5px; padding: 10px; }")
+        metrics_layout = QHBoxLayout(metrics_frame)
         
-        # Setup main chart (combined line and bar)
-        self.main_chart = LineChartWidget(width=16, height=4)
-        charts_layout.addWidget(self.main_chart.get_canvas(), 0, 0, 1, 3)  # Span all 3 columns
+        # Create metric displays
+        metric_layouts = []
         
-        # Setup bottom charts with equal sizes
-        bottom_width = 5
-        bottom_height = 3
+        # Total P&L
+        total_pl_layout = self.create_metric_display("Total P&L", "$12,381.77")
+        metric_layouts.append(total_pl_layout)
         
-        # Setup pie chart
-        self.pie_chart = PieChartWidget(width=bottom_width, height=bottom_height)
-        charts_layout.addWidget(self.pie_chart.get_canvas(), 1, 0)
+        # Win Rate
+        win_rate_layout = self.create_metric_display("Win Rate", "78.5%")
+        metric_layouts.append(win_rate_layout)
         
-        # Setup weekly bar chart
-        self.weekly_chart = BarChartWidget(width=bottom_width, height=bottom_height)
-        charts_layout.addWidget(self.weekly_chart.get_canvas(), 1, 1)
+        # Average Trade
+        avg_trade_layout = self.create_metric_display("Average Trade", "$25.83")
+        metric_layouts.append(avg_trade_layout)
         
-        # Setup source bar chart
-        self.source_chart = BarChartWidget(width=bottom_width, height=bottom_height)
-        charts_layout.addWidget(self.source_chart.get_canvas(), 1, 2)
+        # Profit Factor
+        profit_factor_layout = self.create_metric_display("Profit Factor", "2.5")
+        metric_layouts.append(profit_factor_layout)
         
-        # Set column stretches to distribute space evenly
-        charts_layout.setColumnStretch(0, 1)
-        charts_layout.setColumnStretch(1, 1)
-        charts_layout.setColumnStretch(2, 1)
+        # Best Trade
+        best_trade_layout = self.create_metric_display("Best Trade", "$1,234.56")
+        metric_layouts.append(best_trade_layout)
         
-        # Configure chart styles
-        for chart in [self.main_chart, self.pie_chart, self.weekly_chart, self.source_chart]:
-            chart.figure.patch.set_facecolor('#1E1E1E')
-            chart.ax.set_facecolor('#1E1E1E')
-            chart.ax.tick_params(colors='#FFFFFF', which='both')
-            for spine in chart.ax.spines.values():
-                spine.set_color('#2D2D2D')
-            chart.ax.grid(True, linestyle='--', alpha=0.3, color='#2D2D2D')
+        # Worst Trade
+        worst_trade_layout = self.create_metric_display("Worst Trade", "-$567.89")
+        metric_layouts.append(worst_trade_layout)
+        
+        # Add all metrics to the frame
+        for layout in metric_layouts:
+            metrics_layout.addLayout(layout)
+        
+        # Filters Section
+        filters_frame = QFrame()
+        filters_frame.setStyleSheet("QFrame { background-color: #2D2D2D; border-radius: 5px; padding: 10px; }")
+        filters_layout = QHBoxLayout(filters_frame)
+        
+        # Time Period Filter
+        self.period_combo = QComboBox()
+        self.period_combo.addItems(["Last Week", "Last Month", "Last Quarter", "Last Year", "All Time"])
+        self.period_combo.setStyleSheet("""
+            QComboBox {
+                background-color: #2D2D2D;
+                color: #FFFFFF;
+                border: none;
+                padding: 5px 15px;
+                border-radius: 3px;
+                min-width: 120px;
+            }
+        """)
+        
+        # Instrument Filter
+        self.instrument_combo = QComboBox()
+        self.instrument_combo.addItems(["All Instruments", "EURUSD", "GBPUSD", "USDJPY", "BTCUSD"])
+        self.instrument_combo.setStyleSheet(self.period_combo.styleSheet())
+        
+        filters_layout.addWidget(QLabel("Period:"))
+        filters_layout.addWidget(self.period_combo)
+        filters_layout.addWidget(QLabel("Instrument:"))
+        filters_layout.addWidget(self.instrument_combo)
+        filters_layout.addStretch()
+        
+        top_layout.addWidget(metrics_frame)
+        main_layout.addLayout(top_layout)
+        main_layout.addWidget(filters_frame)
+        
+        # Create splitter for main content
+        splitter = QSplitter(Qt.Horizontal)
+        
+        # Left side - P&L Analysis
+        left_widget = QWidget()
+        left_layout = QVBoxLayout(left_widget)
+        left_layout.setContentsMargins(0, 0, 10, 0)
+        
+        # P&L Chart
+        pnl_header = QLabel("Cumulative P&L")
+        pnl_header.setStyleSheet("font-size: 16px; font-weight: bold; color: #4CAF50;")
+        left_layout.addWidget(pnl_header)
+        
+        self.pnl_chart = LineChartWidget(y_axis_position='left')
+        left_layout.addWidget(self.pnl_chart.get_canvas())
+        
+        # Market Session Analysis
+        session_header = QLabel("Market Session Analysis")
+        session_header.setStyleSheet("font-size: 16px; font-weight: bold; color: #4CAF50; margin-top: 15px;")
+        left_layout.addWidget(session_header)
+        
+        self.session_table = self.create_table([
+            "Session", "Total P&L", "Win Rate", "Avg Profit", "Avg Loss", "Net Trades", "Profit Factor"
+        ])
+        left_layout.addWidget(self.session_table)
+        
+        # Right side - Detailed Analysis
+        right_widget = QWidget()
+        right_layout = QVBoxLayout(right_widget)
+        right_layout.setContentsMargins(10, 0, 0, 0)
+        
+        # Weekday Analysis
+        weekday_header = QLabel("Weekday Analysis")
+        weekday_header.setStyleSheet("font-size: 16px; font-weight: bold; color: #4CAF50;")
+        right_layout.addWidget(weekday_header)
+        
+        self.weekday_table = self.create_table([
+            "Day", "Total P&L", "Win Rate", "Avg Profit", "Avg Loss", "Net Trades", "Profit Factor"
+        ])
+        right_layout.addWidget(self.weekday_table)
+        
+        # Monthly Analysis
+        monthly_header = QLabel("Monthly Analysis")
+        monthly_header.setStyleSheet("font-size: 16px; font-weight: bold; color: #4CAF50; margin-top: 15px;")
+        right_layout.addWidget(monthly_header)
+        
+        self.monthly_table = self.create_table([
+            "Month", "Total P&L", "Win Rate", "Avg Profit", "Avg Loss", "Net Trades", "Profit Factor"
+        ])
+        right_layout.addWidget(self.monthly_table)
+        
+        # Buy/Sell Analysis
+        direction_header = QLabel("Buy/Sell Analysis")
+        direction_header.setStyleSheet("font-size: 16px; font-weight: bold; color: #4CAF50; margin-top: 15px;")
+        right_layout.addWidget(direction_header)
+        
+        self.direction_table = self.create_table([
+            "Direction", "Total P&L", "Win Rate", "Avg Profit", "Avg Loss", "Net Trades", "Profit Factor"
+        ])
+        right_layout.addWidget(self.direction_table)
+        
+        # Add widgets to splitter
+        splitter.addWidget(left_widget)
+        splitter.addWidget(right_widget)
+        
+        # Set splitter proportions
+        splitter.setStretchFactor(0, 6)
+        splitter.setStretchFactor(1, 4)
+        
+        main_layout.addWidget(splitter)
+        
+    def create_metric_display(self, label_text, initial_value):
+        """Create a metric display with label and value"""
+        layout = QVBoxLayout()
+        label = QLabel(label_text)
+        label.setStyleSheet("color: #AAAAAA; font-size: 12px;")
+        value = QLabel(initial_value)
+        value.setStyleSheet("color: #4CAF50; font-size: 24px; font-weight: bold;")
+        layout.addWidget(label)
+        layout.addWidget(value)
+        return layout
+        
+    def create_table(self, headers):
+        """Create a styled table widget"""
+        table = QTableWidget()
+        table.setColumnCount(len(headers))
+        table.setHorizontalHeaderLabels(headers)
+        table.setAlternatingRowColors(True)
+        table.verticalHeader().setVisible(False)
+        table.setShowGrid(True)
+        table.setStyleSheet("""
+            QTableWidget {
+                background-color: #1E1E1E;
+                alternate-background-color: #2D2D2D;
+                color: #FFFFFF;
+                gridline-color: #3D3D3D;
+                border: 1px solid #3D3D3D;
+            }
+            QHeaderView::section {
+                background-color: #333333;
+                color: #FFFFFF;
+                padding: 5px;
+                border: none;
+                border-bottom: 1px solid #3D3D3D;
+                font-weight: bold;
+            }
+            QTableWidget::item {
+                padding: 5px;
+                border: none;
+            }
+        """)
+        
+        # Set column resize modes
+        for i in range(len(headers)):
+            if i == 0:
+                table.horizontalHeader().setSectionResizeMode(i, QHeaderView.ResizeToContents)
+            else:
+                table.horizontalHeader().setSectionResizeMode(i, QHeaderView.Stretch)
+                
+        return table
+        
+    def load_sample_data(self):
+        """Load sample data for all widgets"""
+        # Market Session Analysis Data
+        session_data = [
+            ["Asian", "$3,245.50", "75.5%", "$450.25", "-$225.75", "125", "2.1"],
+            ["European", "$5,678.25", "82.3%", "$525.50", "-$275.25", "245", "2.8"],
+            ["New York", "$4,890.75", "79.8%", "$485.75", "-$245.50", "198", "2.5"],
+            ["Overlap", "$2,567.25", "73.5%", "$425.25", "-$215.75", "156", "1.9"]
+        ]
+        self.populate_table(self.session_table, session_data)
+        
+        # Weekday Analysis Data
+        weekday_data = [
+            ["Monday", "$2,345.75", "77.5%", "$445.25", "-$225.50", "145", "2.2"],
+            ["Tuesday", "$3,567.50", "81.2%", "$475.50", "-$235.75", "167", "2.6"],
+            ["Wednesday", "$2,890.25", "76.8%", "$435.75", "-$228.50", "156", "2.1"],
+            ["Thursday", "$2,765.75", "79.5%", "$455.25", "-$232.75", "149", "2.3"],
+            ["Friday", "$2,812.50", "75.8%", "$425.50", "-$245.25", "157", "2.0"]
+        ]
+        self.populate_table(self.weekday_table, weekday_data)
+        
+        # Monthly Analysis Data
+        monthly_data = [
+            ["January", "$4,567.75", "78.5%", "$465.25", "-$235.50", "245", "2.4"],
+            ["February", "$3,890.50", "76.2%", "$445.50", "-$245.75", "198", "2.1"],
+            ["March", "$5,234.25", "82.8%", "$495.75", "-$228.50", "267", "2.9"],
+            ["April", "$4,765.75", "79.5%", "$475.25", "-$232.75", "234", "2.5"],
+            ["May", "$3,912.50", "77.8%", "$455.50", "-$242.25", "212", "2.2"]
+        ]
+        self.populate_table(self.monthly_table, monthly_data)
+        
+        # Buy/Sell Analysis Data
+        direction_data = [
+            ["Buy", "$8,567.75", "81.5%", "$485.25", "-$235.50", "425", "2.7"],
+            ["Sell", "$7,813.50", "75.5%", "$445.50", "-$255.75", "349", "2.3"]
+        ]
+        self.populate_table(self.direction_table, direction_data)
+        
+        # Generate P&L chart data
+        dates = []
+        cumulative_pnl = []
+        daily_pnl = []
+        
+        end_date = datetime.now()
+        current_pnl = 0
+        
+        for i in range(180):  # 6 months of daily data
+            date = end_date - timedelta(days=i)
+            dates.append(date)
             
-            # Use constrained layout for all charts
-            chart.figure.set_constrained_layout(True)
+            # Generate realistic daily P&L
+            daily_change = random.uniform(-500, 750)
+            current_pnl += daily_change
+            
+            cumulative_pnl.append(current_pnl)
+            daily_pnl.append(daily_change)
         
-        # Set initial button states
-        self.tab_content.button_money.setProperty("active", True)
-        self.tab_content.button_deals.setProperty("active", False)
+        dates.reverse()
+        cumulative_pnl.reverse()
+        daily_pnl.reverse()
         
-        # Connect button signals
-        self.tab_content.button_money.clicked.connect(self.show_money_view)
-        self.tab_content.button_deals.clicked.connect(self.show_deals_view)
+        # Update P&L chart without bar value labels
+        self.pnl_chart.update_data(
+            dates,
+            [cumulative_pnl],
+            ['#4CAF50'],
+            bar_data=daily_pnl,
+            bar_colors=['#2196F3' if x >= 0 else '#F44336' for x in daily_pnl],
+            show_bar_labels=False  # Add this parameter to disable bar labels
+        )
         
-        # Initial data
-        self.update_chart_data()
-        
+    def populate_table(self, table, data):
+        """Populate a table with data and formatting"""
+        table.setRowCount(len(data))
+        for row, row_data in enumerate(data):
+            for col, value in enumerate(row_data):
+                item = QTableWidgetItem(value)
+                
+                # Set alignment
+                if col == 0:
+                    item.setTextAlignment(Qt.AlignLeft | Qt.AlignVCenter)
+                else:
+                    item.setTextAlignment(Qt.AlignRight | Qt.AlignVCenter)
+                
+                # Color formatting
+                if '%' in value:
+                    try:
+                        pct = float(value.replace('%', ''))
+                        if pct >= 80:
+                            item.setForeground(QColor("#4CAF50"))  # Green for high win rate
+                        elif pct >= 70:
+                            item.setForeground(QColor("#FFC107"))  # Yellow for medium win rate
+                        else:
+                            item.setForeground(QColor("#F44336"))  # Red for low win rate
+                    except ValueError:
+                        pass
+                elif '$' in value:
+                    try:
+                        amount = float(value.replace('$', '').replace(',', ''))
+                        if '-' in value:
+                            item.setForeground(QColor("#F44336"))  # Red for losses
+                        else:
+                            item.setForeground(QColor("#4CAF50"))  # Green for profits
+                    except ValueError:
+                        pass
+                elif col == 6:  # Profit Factor column
+                    try:
+                        pf = float(value)
+                        if pf >= 2.5:
+                            item.setForeground(QColor("#4CAF50"))  # Green for high profit factor
+                        elif pf >= 2.0:
+                            item.setForeground(QColor("#FFC107"))  # Yellow for medium profit factor
+                        else:
+                            item.setForeground(QColor("#F44336"))  # Red for low profit factor
+                    except ValueError:
+                        pass
+                
+                table.setItem(row, col, item)
+            table.setRowHeight(row, 30)
+            
     def update_metrics(self, metrics):
-        """Update all metrics
+        """Update profit & loss metrics with new values
         
         Args:
-            metrics (dict): Dictionary containing the metric values
+            metrics (dict): Dictionary containing P&L metrics
+                - profit (float): Total profit
+                - loss (float): Total loss
+                - swaps (float): Total swaps
+                - dividends (float): Total dividends
+                - commissions (float): Total commissions
+                - year_total (float): Year-to-date total
+                - total (float): All-time total
         """
-        if 'profit' in metrics:
-            self.tab_content.value_profit.setText(f"{metrics['profit']:,.2f}")
-        if 'loss' in metrics:
-            self.tab_content.value_loss.setText(f"-{metrics['loss']:,.2f}")
-        if 'swaps' in metrics:
-            self.tab_content.value_swaps.setText(str(metrics['swaps']))
-        if 'dividends' in metrics:
-            self.tab_content.value_dividends.setText(str(metrics['dividends']))
-        if 'commissions' in metrics:
-            self.tab_content.value_commissions.setText(str(metrics['commissions']))
-        if 'year_total' in metrics:
-            self.tab_content.value_year_total.setText(f"{metrics['year_total']}k")
-        if 'total' in metrics:
-            self.tab_content.value_total.setText(f"{metrics['total']}k")
-            
-    def update_chart_data(self, view_type='money'):
-        """Update all charts with profit/loss data
+        # Find all metric value labels
+        metric_values = {}
+        for label in self.findChildren(QLabel):
+            if label.text() in ["Total P&L", "Win Rate", "Average Trade", "Profit Factor", "Best Trade", "Worst Trade"]:
+                # Store the value label (next sibling)
+                value_label = label.parent().findChild(QLabel, "", options=Qt.FindChildOption.FindChildrenRecursively)
+                if value_label and value_label != label:
+                    metric_values[label.text()] = value_label
+
+        # Update total P&L
+        if 'total' in metrics and "Total P&L" in metric_values:
+            metric_values["Total P&L"].setText(f"${metrics['total']:,.2f}")
         
-        Args:
-            view_type (str): Type of view to show ('money' or 'deals')
-        """
-        if view_type == 'money':
-            # Update main chart (combined line and bar)
-            dates = [
-                '2025.02.09', '2025.02.10', '2025.02.11', '2025.02.12', 
-                '2025.02.13', '2025.02.14'
-            ]
-            # Daily profit/loss values for bars
-            profit_loss = [0, 0, 221.56, -38.75, 182.81, 0]
-            # Cumulative total for line
-            total = [12000, 12000, 12221.56, 12182.81, 12365.62, 12365.62]
-            
-            self.main_chart.update_data(
-                x_data=dates,
-                y_data=[total],  # Line data showing cumulative total
-                bar_data=profit_loss,  # Bar data showing daily profit/loss
-                colors=['#2196F3'],  # Blue for total line
-                bar_colors=['#4CAF50' if v >= 0 else '#F44336' for v in profit_loss]  # Green/red for profit/loss
-            )
-            
-            # Update pie chart
-            gross_profit = 22.69
-            gross_loss = 10.31
-            self.pie_chart.update_data(
-                sizes=[gross_profit, gross_loss],
-                labels=['Gross Profit\n+22.69k', 'Gross Loss\n-10.31k'],
-                colors=['#4CAF50', '#F44336']
-            )
-            
-            # Update weekly bar chart
-            days = ['M', 'T', 'W', 'T', 'F', 'S', 'S']
-            daily_values = [500, 1200, -300, 800, -200, 0, 0]
-            colors = ['#4CAF50' if v >= 0 else '#F44336' for v in daily_values]
-            
-            self.weekly_chart.update_data(
-                categories=days,
-                values=daily_values,
-                colors=colors
-            )
-            
-            # Update source bar chart
-            sources = ['Manual', 'Robot', 'Signals']
-            source_values = [3500, 15000, 0]
-            source_colors = ['#4CAF50'] * len(sources)
-            
-            self.source_chart.update_data(
-                categories=sources,
-                values=source_values,
-                colors=source_colors
-            )
-            
-        else:  # deals view
-            # Update main chart to show deals over time
-            dates = ['2025.02.09', '2025.02.10', '2025.02.11', '2025.02.12', '2025.02.13', '2025.02.14']
-            deals = [2, 3, 5, 4, 3, 1]
-            
-            self.main_chart.update_data(
-                x_data=dates,
-                y_data=[deals],
-                colors=['#4CAF50']
-            )
-            
-            # Update pie chart for deal distribution
-            manual_deals = 5
-            robot_deals = 15
-            signals_deals = 0
-            
-            self.pie_chart.update_data(
-                sizes=[manual_deals, robot_deals, signals_deals],
-                labels=['Manual', 'Robot', 'Signals'],
-                colors=['#4CAF50', '#2196F3', '#9C27B0']
-            )
-            
-            # Update weekly bar chart
-            days = ['M', 'T', 'W', 'T', 'F', 'S', 'S']
-            daily_deals = [2, 3, 5, 4, 3, 0, 0]
-            colors = ['#4CAF50'] * len(days)
-            
-            self.weekly_chart.update_data(
-                categories=days,
-                values=daily_deals,
-                colors=colors
-            )
-            
-            # Update source bar chart
-            sources = ['Manual', 'Robot', 'Signals']
-            deal_counts = [manual_deals, robot_deals, signals_deals]
-            source_colors = ['#4CAF50', '#2196F3', '#9C27B0']
-            
-            self.source_chart.update_data(
-                categories=sources,
-                values=deal_counts,
-                colors=source_colors
-            )
-            
-        # Update text colors for all charts
-        for chart in [self.main_chart, self.pie_chart, self.weekly_chart, self.source_chart]:
-            for text in chart.ax.get_xticklabels() + chart.ax.get_yticklabels():
-                text.set_color('#FFFFFF')
-                text.set_fontsize(9)
-            chart.canvas.draw()
+        # Calculate and update win rate
+        if all(key in metrics for key in ['profit', 'loss']) and "Win Rate" in metric_values:
+            total_trades = abs(metrics['profit']) + abs(metrics['loss'])
+            if total_trades > 0:
+                win_rate = (metrics['profit'] / total_trades) * 100
+                metric_values["Win Rate"].setText(f"{win_rate:.1f}%")
         
-    def show_money_view(self):
-        """Switch to money view"""
-        self.tab_content.button_money.setProperty("active", True)
-        self.tab_content.button_deals.setProperty("active", False)
-        self.tab_content.button_money.style().unpolish(self.tab_content.button_money)
-        self.tab_content.button_money.style().polish(self.tab_content.button_money)
-        self.tab_content.button_deals.style().unpolish(self.tab_content.button_deals)
-        self.tab_content.button_deals.style().polish(self.tab_content.button_deals)
-        self.update_chart_data('money')
+        # Calculate and update average trade
+        if all(key in metrics for key in ['profit', 'loss', 'swaps', 'dividends', 'commissions']) and "Average Trade" in metric_values:
+            total_trades = abs(metrics['profit']) + abs(metrics['loss'])
+            if total_trades > 0:
+                avg_trade = (metrics['profit'] + metrics['loss'] + metrics['swaps'] + 
+                           metrics['dividends'] - metrics['commissions']) / total_trades
+                metric_values["Average Trade"].setText(f"${avg_trade:.2f}")
         
-    def show_deals_view(self):
-        """Switch to deals view"""
-        self.tab_content.button_money.setProperty("active", False)
-        self.tab_content.button_deals.setProperty("active", True)
-        self.tab_content.button_money.style().unpolish(self.tab_content.button_money)
-        self.tab_content.button_money.style().polish(self.tab_content.button_money)
-        self.tab_content.button_deals.style().unpolish(self.tab_content.button_deals)
-        self.tab_content.button_deals.style().polish(self.tab_content.button_deals)
-        self.update_chart_data('deals') 
+        # Calculate and update profit factor
+        if all(key in metrics for key in ['profit', 'loss']) and "Profit Factor" in metric_values:
+            if abs(metrics['loss']) > 0:
+                profit_factor = abs(metrics['profit']) / abs(metrics['loss'])
+                metric_values["Profit Factor"].setText(f"{profit_factor:.2f}")
+        
+        # Update best and worst trades
+        if 'profit' in metrics and "Best Trade" in metric_values:
+            best_trade = metrics.get('best_trade', metrics['profit'])
+            metric_values["Best Trade"].setText(f"${best_trade:.2f}")
+        
+        if 'loss' in metrics and "Worst Trade" in metric_values:
+            worst_trade = metrics.get('worst_trade', metrics['loss'])
+            metric_values["Worst Trade"].setText(f"${worst_trade:.2f}") 

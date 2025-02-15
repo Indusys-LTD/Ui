@@ -123,7 +123,7 @@ class LineChartWidget(BaseChartWidget):
                 self.highlight_rect = None
             self.canvas.draw_idle()
         
-    def update_data(self, x_data, y_data, colors=None, bar_data=None, bar_colors=None):
+    def update_data(self, x_data, y_data, colors=None, bar_data=None, bar_colors=None, show_bar_labels=True):
         """Update the chart with new data
         
         Args:
@@ -132,6 +132,7 @@ class LineChartWidget(BaseChartWidget):
             colors (list, optional): List of colors for each line
             bar_data (list, optional): List of values for bars
             bar_colors (list, optional): List of colors for bars
+            show_bar_labels (bool, optional): Whether to show value labels on bars
         """
         self.clear_plot()
         
@@ -153,19 +154,20 @@ class LineChartWidget(BaseChartWidget):
         if bar_data is not None:
             bars = self.ax.bar(x_nums, bar_data, color=bar_colors, alpha=0.7, width=0.5, zorder=3)
             
-            # Add value labels on top of bars
-            for bar in bars:
-                height = bar.get_height()
-                if height != 0:  # Only show label if value is not zero
-                    self.ax.text(
-                        bar.get_x() + bar.get_width()/2,
-                        height,
-                        f'{height:+,.2f}',
-                        ha='center',
-                        va='bottom' if height >= 0 else 'top',
-                        color='#FFFFFF',
-                        fontsize=9
-                    )
+            # Add value labels on top of bars if enabled
+            if show_bar_labels:
+                for bar in bars:
+                    height = bar.get_height()
+                    if height != 0:  # Only show label if value is not zero
+                        self.ax.text(
+                            bar.get_x() + bar.get_width()/2,
+                            height,
+                            f'{height:+,.2f}',
+                            ha='center',
+                            va='bottom' if height >= 0 else 'top',
+                            color='#FFFFFF',
+                            fontsize=9
+                        )
         
         # Plot each line
         self.scatter_points = []
