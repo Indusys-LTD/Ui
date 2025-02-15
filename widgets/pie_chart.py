@@ -2,8 +2,8 @@ from .base_chart import BaseChartWidget
 import matplotlib.pyplot as plt
 
 class PieChartWidget(BaseChartWidget):
-    def __init__(self, parent=None):
-        super().__init__(parent=parent)
+    def __init__(self, width=8, height=4, parent=None):
+        super().__init__(width=width, height=height, parent=parent)
         self.ax.set_title('Pie Chart')
         
     def update_data(self, sizes, labels=None, autopct='%1.1f%%', colors=None):

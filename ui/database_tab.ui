@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>DatabaseTab</class>
+ <widget class="QWidget" name="DatabaseTab">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>800</width>
+    <height>600</height>
+   </rect>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <widget class="QFrame" name="status_frame">
+     <property name="frameShape">
+      <enum>QFrame::StyledPanel</enum>
+     </property>
+     <property name="styleSheet">
+      <string>
+       QFrame {
+           background-color: #2D2D2D;
+           border-radius: 10px;
+           margin: 5px;
+           padding: 10px;
+       }
+      </string>
+     </property>
+     <layout class="QVBoxLayout" name="status_layout">
+      <item>
+       <widget class="QLabel" name="status_header">
+        <property name="text">
+         <string>Database Connection Status</string>
+        </property>
+        <property name="styleSheet">
+         <string>font-size: 16px; font-weight: bold; color: #4CAF50;</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <layout class="QHBoxLayout" name="status_indicators">
+        <item>
+         <widget class="QLabel" name="connection_status">
+          <property name="styleSheet">
+           <string>font-size: 14px; margin: 10px;</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="response_time">
+          <property name="styleSheet">
+           <string>font-size: 14px; margin: 10px;</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <spacer name="horizontalSpacer">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QFrame" name="metrics_frame">
+     <property name="frameShape">
+      <enum>QFrame::StyledPanel</enum>
+     </property>
+     <property name="styleSheet">
+      <string>
+       QFrame {
+           background-color: #2D2D2D;
+           border-radius: 10px;
+           margin: 5px;
+           padding: 10px;
+       }
+      </string>
+     </property>
+     <layout class="QVBoxLayout" name="metrics_layout">
+      <item>
+       <widget class="QLabel" name="metrics_header">
+        <property name="text">
+         <string>Performance Metrics</string>
+        </property>
+        <property name="styleSheet">
+         <string>font-size: 16px; font-weight: bold; color: #4CAF50;</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QFrame" name="queries_frame">
+     <property name="frameShape">
+      <enum>QFrame::StyledPanel</enum>
+     </property>
+     <property name="styleSheet">
+      <string>
+       QFrame {
+           background-color: #2D2D2D;
+           border-radius: 10px;
+           margin: 5px;
+           padding: 10px;
+       }
+      </string>
+     </property>
+     <layout class="QVBoxLayout" name="queries_layout">
+      <item>
+       <widget class="QLabel" name="queries_header">
+        <property name="text">
+         <string>Recent Queries</string>
+        </property>
+        <property name="styleSheet">
+         <string>font-size: 16px; font-weight: bold; color: #4CAF50;</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QTableWidget" name="queries_table">
+        <property name="alternatingRowColors">
+         <bool>true</bool>
+        </property>
+        <property name="styleSheet">
+         <string>
+          QTableWidget {
+              background-color: #1E1E1E;
+              alternate-background-color: #2D2D2D;
+              color: #FFFFFF;
+          }
+          QHeaderView::section {
+              background-color: #333333;
+              color: #FFFFFF;
+              padding: 5px;
+          }
+         </string>
+        </property>
+        <column>
+         <property name="text">
+          <string>Timestamp</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>Query Type</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>Duration (ms)</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>Status</string>
+         </property>
+        </column>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+</ui> 

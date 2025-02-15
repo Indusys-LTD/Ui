@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>CurrencyTab</class>
+ <widget class="QWidget" name="CurrencyTab">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>800</width>
+    <height>600</height>
+   </rect>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <layout class="QHBoxLayout" name="top_layout">
+     <item>
+      <widget class="QLabel" name="total_value">
+       <property name="text">
+        <string>12,381.77</string>
+       </property>
+       <property name="styleSheet">
+        <string>color: #FFFFFF; font-weight: bold; font-size: 16px;</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="currency_label">
+       <property name="text">
+        <string>EURUSD</string>
+       </property>
+       <property name="styleSheet">
+        <string>color: #AAAAAA;</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="horizontalSpacer">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QPushButton" name="button_money">
+       <property name="text">
+        <string>Money</string>
+       </property>
+       <property name="styleSheet">
+        <string>
+         QPushButton {
+             background-color: #2D2D2D;
+             color: #FFFFFF;
+             border: none;
+             padding: 5px 15px;
+             border-radius: 2px;
+         }
+         QPushButton:hover {
+             background-color: #404040;
+         }
+         QPushButton[active="true"] {
+             background-color: #2196F3;
+         }
+        </string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="button_deals">
+       <property name="text">
+        <string>Deals</string>
+       </property>
+       <property name="styleSheet">
+        <string>
+         QPushButton {
+             background-color: #2D2D2D;
+             color: #FFFFFF;
+             border: none;
+             padding: 5px 15px;
+             border-radius: 2px;
+         }
+         QPushButton:hover {
+             background-color: #404040;
+         }
+         QPushButton[active="true"] {
+             background-color: #2196F3;
+         }
+        </string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <widget class="QWidget" name="chart_container" native="true">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="metrics_layout">
+     <item>
+      <widget class="QLabel" name="label_profit_factor">
+       <property name="text">
+        <string>Profit Factor:</string>
+       </property>
+       <property name="styleSheet">
+        <string>color: #AAAAAA;</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="value_profit_factor">
+       <property name="text">
+        <string>2.20</string>
+       </property>
+       <property name="styleSheet">
+        <string>color: #4CAF50; font-weight: bold;</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_netto_profit">
+       <property name="text">
+        <string>Netto Profit:</string>
+       </property>
+       <property name="styleSheet">
+        <string>color: #AAAAAA;</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="value_netto_profit">
+       <property name="text">
+        <string>12,381.77</string>
+       </property>
+       <property name="styleSheet">
+        <string>color: #4CAF50; font-weight: bold;</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_fees">
+       <property name="text">
+        <string>Fees:</string>
+       </property>
+       <property name="styleSheet">
+        <string>color: #AAAAAA;</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="value_fees">
+       <property name="text">
+        <string>0.00</string>
+       </property>
+       <property name="styleSheet">
+        <string>color: #4CAF50; font-weight: bold;</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="horizontalSpacer_2">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+</ui> 

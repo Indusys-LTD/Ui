@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>SequenceTab</class>
+ <widget class="QWidget" name="SequenceTab">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>800</width>
+    <height>600</height>
+   </rect>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <widget class="QTableWidget" name="table">
+     <property name="alternatingRowColors">
+      <bool>true</bool>
+     </property>
+     <property name="styleSheet">
+      <string>
+       QTableWidget {
+           background-color: #1E1E1E;
+           alternate-background-color: #2D2D2D;
+           color: #FFFFFF;
+       }
+       QHeaderView::section {
+           background-color: #333333;
+           color: #FFFFFF;
+           padding: 5px;
+       }
+      </string>
+     </property>
+     <column>
+      <property name="text">
+       <string>Time</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Operation</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Symbol</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Volume</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Price</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Profit/Loss</string>
+      </property>
+     </column>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+</ui> 

@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>AITab</class>
+ <widget class="QWidget" name="AITab">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>800</width>
+    <height>600</height>
+   </rect>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <widget class="QScrollArea" name="scrollArea">
+     <property name="widgetResizable">
+      <bool>true</bool>
+     </property>
+     <property name="styleSheet">
+      <string>QScrollArea { border: none; }</string>
+     </property>
+     <widget class="QWidget" name="scrollAreaWidgetContents">
+      <layout class="QVBoxLayout" name="contentLayout">
+       <item>
+        <widget class="QFrame" name="analysis_frame">
+         <property name="frameShape">
+          <enum>QFrame::StyledPanel</enum>
+         </property>
+         <property name="styleSheet">
+          <string>
+           QFrame {
+               background-color: #2D2D2D;
+               border-radius: 10px;
+               margin: 5px;
+               padding: 10px;
+           }
+          </string>
+         </property>
+         <layout class="QVBoxLayout" name="analysis_layout">
+          <item>
+           <widget class="QLabel" name="analysis_header">
+            <property name="text">
+             <string>AI Market Analysis</string>
+            </property>
+            <property name="styleSheet">
+             <string>font-size: 16px; font-weight: bold; color: #4CAF50;</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="market_sentiment">
+            <property name="styleSheet">
+             <string>font-size: 14px; margin: 10px;</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QFrame" name="risk_frame">
+         <property name="frameShape">
+          <enum>QFrame::StyledPanel</enum>
+         </property>
+         <property name="styleSheet">
+          <string>
+           QFrame {
+               background-color: #2D2D2D;
+               border-radius: 10px;
+               margin: 5px;
+               padding: 10px;
+           }
+          </string>
+         </property>
+         <layout class="QVBoxLayout" name="risk_layout">
+          <item>
+           <widget class="QLabel" name="risk_header">
+            <property name="text">
+             <string>Risk Assessment</string>
+            </property>
+            <property name="styleSheet">
+             <string>font-size: 16px; font-weight: bold; color: #4CAF50;</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <layout class="QVBoxLayout" name="risk_metrics_layout">
+            <item>
+             <layout class="QHBoxLayout" name="market_volatility_layout">
+              <item>
+               <widget class="QLabel" name="label_market_volatility">
+                <property name="text">
+                 <string>Market Volatility:</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QProgressBar" name="progress_market_volatility">
+                <property name="styleSheet">
+                 <string>
+                  QProgressBar {
+                      border: 2px solid #2D2D2D;
+                      border-radius: 5px;
+                      text-align: center;
+                  }
+                  QProgressBar::chunk {
+                      background-color: #4CAF50;
+                  }
+                 </string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <layout class="QHBoxLayout" name="portfolio_risk_layout">
+              <item>
+               <widget class="QLabel" name="label_portfolio_risk">
+                <property name="text">
+                 <string>Portfolio Risk:</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QProgressBar" name="progress_portfolio_risk">
+                <property name="styleSheet">
+                 <string>
+                  QProgressBar {
+                      border: 2px solid #2D2D2D;
+                      border-radius: 5px;
+                      text-align: center;
+                  }
+                  QProgressBar::chunk {
+                      background-color: #4CAF50;
+                  }
+                 </string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <layout class="QHBoxLayout" name="strategy_risk_layout">
+              <item>
+               <widget class="QLabel" name="label_strategy_risk">
+                <property name="text">
+                 <string>Trading Strategy Risk:</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QProgressBar" name="progress_strategy_risk">
+                <property name="styleSheet">
+                 <string>
+                  QProgressBar {
+                      border: 2px solid #2D2D2D;
+                      border-radius: 5px;
+                      text-align: center;
+                  }
+                  QProgressBar::chunk {
+                      background-color: #4CAF50;
+                  }
+                 </string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QFrame" name="predictions_frame">
+         <property name="frameShape">
+          <enum>QFrame::StyledPanel</enum>
+         </property>
+         <property name="styleSheet">
+          <string>
+           QFrame {
+               background-color: #2D2D2D;
+               border-radius: 10px;
+               margin: 5px;
+               padding: 10px;
+           }
+          </string>
+         </property>
+         <layout class="QVBoxLayout" name="predictions_layout">
+          <item>
+           <widget class="QLabel" name="predictions_header">
+            <property name="text">
+             <string>AI Predictions</string>
+            </property>
+            <property name="styleSheet">
+             <string>font-size: 16px; font-weight: bold; color: #4CAF50;</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <layout class="QVBoxLayout" name="predictions_content">
+            <item>
+             <layout class="QHBoxLayout" name="eurusd_layout">
+              <item>
+               <widget class="QLabel" name="label_eurusd">
+                <property name="text">
+                 <string>EURUSD Trend:</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLabel" name="prediction_eurusd">
+                <property name="styleSheet">
+                 <string>font-weight: bold;</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <layout class="QHBoxLayout" name="gbpusd_layout">
+              <item>
+               <widget class="QLabel" name="label_gbpusd">
+                <property name="text">
+                 <string>GBPUSD Trend:</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLabel" name="prediction_gbpusd">
+                <property name="styleSheet">
+                 <string>font-weight: bold;</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <layout class="QHBoxLayout" name="btcusd_layout">
+              <item>
+               <widget class="QLabel" name="label_btcusd">
+                <property name="text">
+                 <string>BTCUSD Trend:</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLabel" name="prediction_btcusd">
+                <property name="styleSheet">
+                 <string>font-weight: bold;</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <spacer name="verticalSpacer">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+</ui> 

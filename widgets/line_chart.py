@@ -5,15 +5,16 @@ from datetime import datetime
 import numpy as np
 
 class LineChartWidget(BaseChartWidget):
-    def __init__(self, parent=None, y_axis_position='right'):
-        super().__init__(width=12, height=4, parent=parent)
+    def __init__(self, parent=None, y_axis_position='right', width=12, height=4):
+        super().__init__(width=width, height=height, parent=parent)
         self.y_axis_position = y_axis_position
         self.setup_chart()
         self.tooltip_annotation = None
         self.scatter_points = []
-        self.balance_data = None
-        self.equity_data = None
+        self.line_data = None
+        self.bar_data = None
         self.dates = None
+        self.highlight_rect = None
         
         # Connect event handlers
         self.canvas.mpl_connect('motion_notify_event', self.on_mouse_move)
@@ -45,11 +46,14 @@ class LineChartWidget(BaseChartWidget):
         
     def on_mouse_move(self, event):
         """Handle mouse movement over the chart"""
-        if event.inaxes != self.ax or not self.scatter_points:
+        if event.inaxes != self.ax:
             if self.tooltip_annotation:
                 self.tooltip_annotation.remove()
                 self.tooltip_annotation = None
-                self.canvas.draw_idle()
+            if self.highlight_rect:
+                self.highlight_rect.remove()
+                self.highlight_rect = None
+            self.canvas.draw_idle()
             return
 
         # Find the closest point based only on x-axis distance
@@ -68,62 +72,123 @@ class LineChartWidget(BaseChartWidget):
         if min_distance < 2:  # Increased threshold and using only x-distance
             if self.tooltip_annotation:
                 self.tooltip_annotation.remove()
+            if self.highlight_rect:
+                self.highlight_rect.remove()
+                
+            # Add highlight rectangle
+            date_num = mdates.date2num(self.dates[closest_idx])
+            self.highlight_rect = self.ax.axvspan(
+                date_num - 0.3, date_num + 0.3,
+                color='#FFFFFF', alpha=0.1
+            )
                 
             # Format the tooltip text
-            tooltip_text = f'Balance: {self.balance_data[closest_idx]:,.2f}\nEquity: {self.equity_data[closest_idx]:,.2f}'
+            date_str = self.dates[closest_idx].strftime('%Y.%m.%d %H:%M')
+            if self.bar_data is not None:
+                profit_loss = self.bar_data[closest_idx]
+                total = self.line_data[0][closest_idx] if self.line_data else 0
+                
+                # Split into profit and loss for display
+                if profit_loss > 0:
+                    tooltip_text = f'{date_str}\nProfit: +{profit_loss:.2f}\nTotal: {total:.2f}'
+                else:
+                    tooltip_text = f'{date_str}\nLoss: {profit_loss:.2f}\nTotal: {total:.2f}'
+            else:
+                total = self.line_data[0][closest_idx]
+                tooltip_text = f'{date_str}\nTotal: {total:.2f}'
             
-            # Calculate y position for tooltip (midway between balance and equity)
-            y_pos = (self.balance_data[closest_idx] + self.equity_data[closest_idx]) / 2
+            # Calculate y position for tooltip (use the maximum value point)
+            if self.bar_data is not None:
+                y_pos = max(abs(self.bar_data[closest_idx]), self.line_data[0][closest_idx])
+            else:
+                y_pos = self.line_data[0][closest_idx]
             
             # Create and show the tooltip
             self.tooltip_annotation = self.ax.annotate(
                 tooltip_text,
                 xy=(mdates.date2num(self.dates[closest_idx]), y_pos),
-                xytext=(0, 0), textcoords='offset points',
+                xytext=(10, 10), textcoords='offset points',
                 bbox=dict(boxstyle='round,pad=0.5', fc='#2D2D2D', ec='#FFFFFF', alpha=0.8),
                 color='#FFFFFF',
                 fontsize=9,
-                ha='center',  # Center horizontally
-                va='center'   # Center vertically
+                ha='left',
+                va='bottom'
             )
             self.canvas.draw_idle()
         elif self.tooltip_annotation:
             self.tooltip_annotation.remove()
             self.tooltip_annotation = None
+            if self.highlight_rect:
+                self.highlight_rect.remove()
+                self.highlight_rect = None
             self.canvas.draw_idle()
         
-    def update_data(self, x_data, y_data, colors=None):
-        """Update the line chart with new data
+    def update_data(self, x_data, y_data, colors=None, bar_data=None, bar_colors=None):
+        """Update the chart with new data
         
         Args:
             x_data (list): List of x-axis values (dates)
             y_data (list): List of lists containing y values for each line
             colors (list, optional): List of colors for each line
+            bar_data (list, optional): List of values for bars
+            bar_colors (list, optional): List of colors for bars
         """
         self.clear_plot()
         
         # Store data for tooltip
         self.dates = [datetime.strptime(d, '%Y.%m.%d') for d in x_data]
-        self.balance_data = y_data[0]
-        self.equity_data = y_data[1]
+        self.line_data = y_data
+        self.bar_data = bar_data
+        
+        # Convert dates to numbers for plotting
+        x_nums = mdates.date2num(self.dates)
+        
+        # Plot bars if provided
+        if bar_data is not None:
+            bars = self.ax.bar(x_nums, bar_data, color=bar_colors, alpha=0.7, width=0.5, zorder=3)
+            
+            # Add value labels on top of bars
+            for bar in bars:
+                height = bar.get_height()
+                if height != 0:  # Only show label if value is not zero
+                    self.ax.text(
+                        bar.get_x() + bar.get_width()/2,
+                        height,
+                        f'{height:+,.2f}',
+                        ha='center',
+                        va='bottom' if height >= 0 else 'top',
+                        color='#FFFFFF',
+                        fontsize=9
+                    )
         
         # Plot each line
         self.scatter_points = []
         for i, data in enumerate(y_data):
             color = colors[i] if colors and i < len(colors) else None
             
-            self.ax.plot(self.dates, data, color=color, linewidth=2)
+            # Plot line with increased width for visibility
+            self.ax.plot(x_nums, data, color=color, linewidth=2, zorder=4)
             
             # Add dots at each point and store references
-            scatter = self.ax.scatter(self.dates, data, color=color, s=30, zorder=5)
+            scatter = self.ax.scatter(x_nums, data, color=color, s=30, zorder=5)
             self.scatter_points.append(scatter)
         
         # Format x-axis
         self.ax.xaxis.set_major_formatter(mdates.DateFormatter('%Y.%m.%d'))
         plt.setp(self.ax.get_xticklabels(), rotation=45, ha='right')
         
-        # Adjust layout to prevent label cutoff
-        self.figure.tight_layout()
+        # Set y-axis label if we have bar data
+        if bar_data is not None:
+            self.ax.set_ylabel('Profit/Loss & Total', color='#FFFFFF')
+            
+            # Ensure y-axis limits accommodate both bars and lines
+            ymin, ymax = self.ax.get_ylim()
+            margin = (ymax - ymin) * 0.1  # 10% margin
+            self.ax.set_ylim(ymin - margin, ymax + margin)
+        
+        # Set figure size and adjust layout
+        self.figure.set_size_inches(self.figure.get_size_inches())  # Maintain current size
+        self.figure.set_constrained_layout(True)  # Use constrained_layout instead of tight_layout
         
         self.canvas.draw()
         

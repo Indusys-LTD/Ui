@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>ProfitLossTab</class>
+ <widget class="QWidget" name="ProfitLossTab">
+  <property name="styleSheet">
+   <string>
+    QWidget {
+        background-color: #1E1E1E;
+        color: #FFFFFF;
+    }
+    QLabel {
+        color: #FFFFFF;
+        font-size: 10pt;
+    }
+   </string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <!-- Top metrics section -->
+   <item>
+    <layout class="QHBoxLayout" name="metrics_layout">
+     <!-- Profit -->
+     <item>
+      <widget class="QLabel" name="label_profit">
+       <property name="styleSheet">
+        <string>color: #4CAF50;</string>
+       </property>
+       <property name="text">
+        <string>Profit</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="value_profit">
+       <property name="styleSheet">
+        <string>color: #4CAF50; font-weight: bold;</string>
+       </property>
+       <property name="text">
+        <string>22 691.04</string>
+       </property>
+      </widget>
+     </item>
+     
+     <!-- Dividends -->
+     <item>
+      <widget class="QLabel" name="label_dividends">
+       <property name="styleSheet">
+        <string>color: #AAAAAA;</string>
+       </property>
+       <property name="text">
+        <string>Dividends</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="value_dividends">
+       <property name="text">
+        <string>0.00</string>
+       </property>
+      </widget>
+     </item>
+     
+     <!-- Swaps -->
+     <item>
+      <widget class="QLabel" name="label_swaps">
+       <property name="styleSheet">
+        <string>color: #AAAAAA;</string>
+       </property>
+       <property name="text">
+        <string>Swaps</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="value_swaps">
+       <property name="styleSheet">
+        <string>color: #F44336;</string>
+       </property>
+       <property name="text">
+        <string>-12.77</string>
+       </property>
+      </widget>
+     </item>
+     
+     <!-- Loss -->
+     <item>
+      <widget class="QLabel" name="label_loss">
+       <property name="styleSheet">
+        <string>color: #F44336;</string>
+       </property>
+       <property name="text">
+        <string>Loss</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="value_loss">
+       <property name="styleSheet">
+        <string>color: #F44336; font-weight: bold;</string>
+       </property>
+       <property name="text">
+        <string>-10 309.27</string>
+       </property>
+      </widget>
+     </item>
+     
+     <!-- Commissions -->
+     <item>
+      <widget class="QLabel" name="label_commissions">
+       <property name="styleSheet">
+        <string>color: #AAAAAA;</string>
+       </property>
+       <property name="text">
+        <string>Commissions</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="value_commissions">
+       <property name="text">
+        <string>0.00</string>
+       </property>
+      </widget>
+     </item>
+     
+     <item>
+      <spacer name="horizontalSpacer">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+      </spacer>
+     </item>
+     
+     <!-- View toggle buttons -->
+     <item>
+      <widget class="QPushButton" name="button_money">
+       <property name="styleSheet">
+        <string>
+         QPushButton {
+             background-color: #2D2D2D;
+             color: #FFFFFF;
+             border: none;
+             padding: 5px 15px;
+             border-radius: 2px;
+         }
+         QPushButton:hover {
+             background-color: #404040;
+         }
+         QPushButton[active="true"] {
+             background-color: #2196F3;
+         }
+        </string>
+       </property>
+       <property name="text">
+        <string>Money</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="button_deals">
+       <property name="styleSheet">
+        <string>
+         QPushButton {
+             background-color: #2D2D2D;
+             color: #FFFFFF;
+             border: none;
+             padding: 5px 15px;
+             border-radius: 2px;
+         }
+         QPushButton:hover {
+             background-color: #404040;
+         }
+         QPushButton[active="true"] {
+             background-color: #2196F3;
+         }
+        </string>
+       </property>
+       <property name="text">
+        <string>Deals</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+
+   <!-- Main chart area -->
+   <item>
+    <widget class="QWidget" name="chart_container" native="true">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+       <horstretch>0</horstretch>
+       <verstretch>2</verstretch>
+      </sizepolicy>
+     </property>
+    </widget>
+   </item>
+
+   <!-- Bottom section with year summary -->
+   <item>
+    <layout class="QHBoxLayout" name="year_summary_layout">
+     <item>
+      <widget class="QLabel" name="label_year">
+       <property name="text">
+        <string>2025</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="value_year_total">
+       <property name="text">
+        <string>12.38k</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="horizontalSpacer_2">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_total">
+       <property name="text">
+        <string>Total:</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="value_total">
+       <property name="text">
+        <string>12.38k</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+</ui> 

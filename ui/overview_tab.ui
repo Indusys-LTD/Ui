@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>OverviewTab</class>
+ <widget class="QWidget" name="OverviewTab">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>800</width>
+    <height>600</height>
+   </rect>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <widget class="QComboBox" name="account_combo"/>
+   </item>
+   <item>
+    <layout class="QGridLayout" name="metrics_grid">
+     <item row="0" column="0">
+      <widget class="QLabel" name="label_total_balance">
+       <property name="text">
+        <string>Total Balance:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <widget class="QLabel" name="value_total_balance">
+       <property name="styleSheet">
+        <string>color: #4CAF50; font-weight: bold;</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0">
+      <widget class="QLabel" name="label_open_positions">
+       <property name="text">
+        <string>Open Positions:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1">
+      <widget class="QLabel" name="value_open_positions">
+       <property name="styleSheet">
+        <string>color: #4CAF50; font-weight: bold;</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="0">
+      <widget class="QLabel" name="label_daily_profit">
+       <property name="text">
+        <string>Daily Profit:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="1">
+      <widget class="QLabel" name="value_daily_profit">
+       <property name="styleSheet">
+        <string>color: #4CAF50; font-weight: bold;</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="0">
+      <widget class="QLabel" name="label_monthly_profit">
+       <property name="text">
+        <string>Monthly Profit:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="1">
+      <widget class="QLabel" name="value_monthly_profit">
+       <property name="styleSheet">
+        <string>color: #4CAF50; font-weight: bold;</string>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="0">
+      <widget class="QLabel" name="label_win_rate">
+       <property name="text">
+        <string>Win Rate:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="1">
+      <widget class="QLabel" name="value_win_rate">
+       <property name="styleSheet">
+        <string>color: #4CAF50; font-weight: bold;</string>
+       </property>
+      </widget>
+     </item>
+     <item row="5" column="0">
+      <widget class="QLabel" name="label_risk_ratio">
+       <property name="text">
+        <string>Risk Ratio:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="5" column="1">
+      <widget class="QLabel" name="value_risk_ratio">
+       <property name="styleSheet">
+        <string>color: #4CAF50; font-weight: bold;</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <widget class="QWidget" name="chart_container" native="true">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+</ui> 

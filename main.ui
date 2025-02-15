@@ -20,9 +20,24 @@
       <property name="currentIndex">
        <number>0</number>
       </property>
+      <widget class="QWidget" name="tab_overview">
+       <attribute name="title">
+        <string>Overview</string>
+       </attribute>
+      </widget>
       <widget class="QWidget" name="tab_summary">
        <attribute name="title">
         <string>Summary</string>
+       </attribute>
+      </widget>
+      <widget class="QWidget" name="tab_sequence">
+       <attribute name="title">
+        <string>Sequence</string>
+       </attribute>
+      </widget>
+      <widget class="QWidget" name="tab_ai">
+       <attribute name="title">
+        <string>AI</string>
        </attribute>
       </widget>
       <widget class="QWidget" name="tab_profit_loss">
@@ -35,9 +50,9 @@
         <string>Long &amp; Short</string>
        </attribute>
       </widget>
-      <widget class="QWidget" name="tab_symbols">
+      <widget class="QWidget" name="tab_currency">
        <attribute name="title">
-        <string>Symbols</string>
+        <string>Currency</string>
        </attribute>
       </widget>
       <widget class="QWidget" name="tab_risks">
