@@ -1,0 +1,658 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>SummaryTab</class>
+ <widget class="QWidget" name="SummaryTab">
+  <property name="styleSheet">
+   <string>
+    QWidget {
+        background-color: #1E1E1E;
+        color: #FFFFFF;
+    }
+    QLabel {
+        color: #FFFFFF;
+        font-size: 10pt;
+    }
+    QProgressBar {
+        background-color: #2D2D2D;
+        border: none;
+        border-radius: 2px;
+        text-align: right;
+        padding-right: 5px;
+        height: 20px;
+        color: #FFFFFF;
+        font-size: 10pt;
+    }
+    QProgressBar::chunk {
+        background-color: #4CAF50;
+        border-radius: 2px;
+    }
+    QPushButton {
+        background-color: #2D2D2D;
+        color: #FFFFFF;
+        border: none;
+        padding: 5px 15px;
+        border-radius: 2px;
+    }
+    QPushButton:hover {
+        background-color: #404040;
+    }
+    QPushButton:pressed {
+        background-color: #505050;
+    }
+    QPushButton[active="true"] {
+        background-color: #2196F3;
+    }
+   </string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <!-- Top section with metrics, donut chart, and progress bars -->
+   <item>
+    <layout class="QHBoxLayout" name="top_layout">
+     <!-- Left metrics -->
+     <item>
+      <layout class="QVBoxLayout" name="left_layout">
+       <item>
+        <widget class="QLabel" name="label_gross_profit">
+         <property name="styleSheet">
+          <string>color: #AAAAAA;</string>
+         </property>
+         <property name="text">
+          <string>Gross Profit</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="value_gross_profit">
+         <property name="styleSheet">
+          <string>color: #4CAF50; font-weight: bold; font-size: 16px;</string>
+         </property>
+         <property name="text">
+          <string>+22.60k</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_dividends">
+         <property name="styleSheet">
+          <string>color: #AAAAAA;</string>
+         </property>
+         <property name="text">
+          <string>Dividends</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="value_dividends">
+         <property name="styleSheet">
+          <string>color: #FFFFFF;</string>
+         </property>
+         <property name="text">
+          <string>0.00</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="verticalSpacer">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </item>
+
+     <!-- Center donut chart -->
+     <item>
+      <widget class="QWidget" name="chart_container" native="true">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="minimumWidth">
+        <number>300</number>
+       </property>
+       <property name="maximumWidth">
+        <number>300</number>
+       </property>
+       <property name="minimumHeight">
+        <number>300</number>
+       </property>
+       <property name="maximumHeight">
+        <number>300</number>
+       </property>
+      </widget>
+     </item>
+
+     <!-- Right metrics -->
+     <item>
+      <layout class="QVBoxLayout" name="right_layout">
+       <item>
+        <widget class="QLabel" name="label_gross_loss">
+         <property name="styleSheet">
+          <string>color: #AAAAAA;</string>
+         </property>
+         <property name="text">
+          <string>Gross Loss</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="value_gross_loss">
+         <property name="styleSheet">
+          <string>color: #F44336; font-weight: bold; font-size: 16px;</string>
+         </property>
+         <property name="text">
+          <string>-10.3k</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_swaps">
+         <property name="styleSheet">
+          <string>color: #AAAAAA;</string>
+         </property>
+         <property name="text">
+          <string>Swaps</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="value_swaps">
+         <property name="styleSheet">
+          <string>color: #F44336;</string>
+         </property>
+         <property name="text">
+          <string>-12.77</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_commissions">
+         <property name="styleSheet">
+          <string>color: #AAAAAA;</string>
+         </property>
+         <property name="text">
+          <string>Commissions</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="value_commissions">
+         <property name="styleSheet">
+          <string>color: #FFFFFF;</string>
+         </property>
+         <property name="text">
+          <string>0.00</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="verticalSpacer_2">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </item>
+
+     <!-- Progress bars on the far right -->
+     <item>
+      <layout class="QGridLayout" name="progress_bars_grid">
+       <!-- Left Column -->
+       
+       <!-- Sharp Ratio -->
+       <item row="0" column="0">
+        <widget class="QLabel" name="label_sharp_ratio">
+         <property name="styleSheet">
+          <string>color: #FFFFFF;</string>
+         </property>
+         <property name="text">
+          <string>Sharp Ratio</string>
+         </property>
+         <property name="minimumWidth">
+          <number>100</number>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="QProgressBar" name="progress_sharp_ratio">
+         <property name="minimumWidth">
+          <number>200</number>
+         </property>
+         <property name="maximumWidth">
+          <number>200</number>
+         </property>
+         <property name="styleSheet">
+          <string>
+           QProgressBar {
+               background-color: #2D2D2D;
+               border: none;
+               border-radius: 2px;
+               text-align: right;
+               padding-right: 5px;
+               height: 20px;
+           }
+           QProgressBar::chunk {
+               background-color: #4CAF50;
+               border-radius: 2px;
+           }
+          </string>
+         </property>
+        </widget>
+       </item>
+
+       <!-- Profit Factor -->
+       <item row="1" column="0">
+        <widget class="QLabel" name="label_profit_factor">
+         <property name="styleSheet">
+          <string>color: #FFFFFF;</string>
+         </property>
+         <property name="text">
+          <string>Profit Factor</string>
+         </property>
+         <property name="minimumWidth">
+          <number>100</number>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QProgressBar" name="progress_profit_factor">
+         <property name="minimumWidth">
+          <number>200</number>
+         </property>
+         <property name="maximumWidth">
+          <number>200</number>
+         </property>
+         <property name="styleSheet">
+          <string>
+           QProgressBar {
+               background-color: #2D2D2D;
+               border: none;
+               border-radius: 2px;
+               text-align: right;
+               padding-right: 5px;
+               height: 20px;
+           }
+           QProgressBar::chunk {
+               background-color: #4CAF50;
+               border-radius: 2px;
+           }
+          </string>
+         </property>
+        </widget>
+       </item>
+
+       <!-- Recovery Factor -->
+       <item row="2" column="0">
+        <widget class="QLabel" name="label_recovery_factor">
+         <property name="styleSheet">
+          <string>color: #FFFFFF;</string>
+         </property>
+         <property name="text">
+          <string>Recovery Factor</string>
+         </property>
+         <property name="minimumWidth">
+          <number>100</number>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1">
+        <widget class="QProgressBar" name="progress_recovery_factor">
+         <property name="minimumWidth">
+          <number>200</number>
+         </property>
+         <property name="maximumWidth">
+          <number>200</number>
+         </property>
+         <property name="styleSheet">
+          <string>
+           QProgressBar {
+               background-color: #2D2D2D;
+               border: none;
+               border-radius: 2px;
+               text-align: right;
+               padding-right: 5px;
+               height: 20px;
+           }
+           QProgressBar::chunk {
+               background-color: #4CAF50;
+               border-radius: 2px;
+           }
+          </string>
+         </property>
+        </widget>
+       </item>
+
+       <!-- Right Column -->
+       
+       <!-- Max Drawdown -->
+       <item row="0" column="2">
+        <widget class="QLabel" name="label_max_drawdown">
+         <property name="styleSheet">
+          <string>color: #AAAAAA;</string>
+         </property>
+         <property name="text">
+          <string>Max. Drawdown</string>
+         </property>
+         <property name="minimumWidth">
+          <number>100</number>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="3">
+        <widget class="QProgressBar" name="progress_max_drawdown">
+         <property name="styleSheet">
+          <string>
+           QProgressBar {
+               background-color: #2D2D2D;
+               border: none;
+               border-radius: 2px;
+               text-align: right;
+               padding-right: 5px;
+               height: 20px;
+           }
+           QProgressBar::chunk {
+               background-color: #4CAF50;
+               border-radius: 2px;
+           }
+          </string>
+         </property>
+         <property name="maximum">
+          <number>100</number>
+         </property>
+         <property name="value">
+          <number>10</number>
+         </property>
+         <property name="format">
+          <string>%v%</string>
+         </property>
+         <property name="minimumWidth">
+          <number>200</number>
+         </property>
+         <property name="maximumWidth">
+          <number>200</number>
+         </property>
+        </widget>
+       </item>
+
+       <!-- Max Deposit Load -->
+       <item row="1" column="2">
+        <widget class="QLabel" name="label_deposit_load">
+         <property name="styleSheet">
+          <string>color: #AAAAAA;</string>
+         </property>
+         <property name="text">
+          <string>Max. Deposit Load</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="3">
+        <widget class="QProgressBar" name="progress_deposit_load">
+         <property name="styleSheet">
+          <string>
+           QProgressBar {
+               background-color: #2D2D2D;
+               border: none;
+               border-radius: 2px;
+               text-align: right;
+               padding-right: 5px;
+               height: 20px;
+           }
+           QProgressBar::chunk {
+               background-color: #4CAF50;
+               border-radius: 2px;
+           }
+          </string>
+         </property>
+         <property name="maximum">
+          <number>200</number>
+         </property>
+         <property name="value">
+          <number>92</number>
+         </property>
+         <property name="format">
+          <string>%v%</string>
+         </property>
+         <property name="minimumWidth">
+          <number>200</number>
+         </property>
+         <property name="maximumWidth">
+          <number>200</number>
+         </property>
+        </widget>
+       </item>
+
+       <!-- Trades per Week -->
+       <item row="2" column="2">
+        <widget class="QLabel" name="label_trades_per_week">
+         <property name="styleSheet">
+          <string>color: #AAAAAA;</string>
+         </property>
+         <property name="text">
+          <string>Trades per Week</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="3">
+        <widget class="QProgressBar" name="progress_trades_per_week">
+         <property name="styleSheet">
+          <string>
+           QProgressBar {
+               background-color: #2D2D2D;
+               border: none;
+               border-radius: 2px;
+               text-align: right;
+               padding-right: 5px;
+               height: 20px;
+           }
+           QProgressBar::chunk {
+               background-color: #4CAF50;
+               border-radius: 2px;
+           }
+          </string>
+         </property>
+         <property name="maximum">
+          <number>830</number>
+         </property>
+         <property name="value">
+          <number>2</number>
+         </property>
+         <property name="format">
+          <string>%v</string>
+         </property>
+         <property name="minimumWidth">
+          <number>200</number>
+         </property>
+         <property name="maximumWidth">
+          <number>200</number>
+         </property>
+        </widget>
+       </item>
+
+       <!-- Average Hold Time -->
+       <item row="3" column="2">
+        <widget class="QLabel" name="label_avg_hold_time">
+         <property name="styleSheet">
+          <string>color: #AAAAAA;</string>
+         </property>
+         <property name="text">
+          <string>Average Hold Time</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="3">
+        <widget class="QProgressBar" name="progress_avg_hold_time">
+         <property name="styleSheet">
+          <string>
+           QProgressBar {
+               background-color: #2D2D2D;
+               border: none;
+               border-radius: 2px;
+               text-align: right;
+               padding-right: 5px;
+               height: 20px;
+           }
+           QProgressBar::chunk {
+               background-color: #4CAF50;
+               border-radius: 2px;
+           }
+          </string>
+         </property>
+         <property name="maximum">
+          <number>24</number>
+         </property>
+         <property name="value">
+          <number>6</number>
+         </property>
+         <property name="format">
+          <string>%vh</string>
+         </property>
+         <property name="minimumWidth">
+          <number>200</number>
+         </property>
+         <property name="maximumWidth">
+          <number>200</number>
+         </property>
+        </widget>
+       </item>
+
+       <!-- Add spacing between columns -->
+       <item row="0" column="2">
+        <spacer name="horizontalSpacer_2">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Fixed</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </item>
+    </layout>
+   </item>
+   
+   <!-- Balance and Equity section -->
+   <item>
+    <layout class="QHBoxLayout" name="balance_layout">
+     <item>
+      <widget class="QLabel" name="value_balance">
+       <property name="styleSheet">
+        <string>color: #2196F3; font-weight: bold; font-size: 14px;</string>
+       </property>
+       <property name="text">
+        <string>112 381.77</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_balance">
+       <property name="styleSheet">
+        <string>color: #2196F3;</string>
+       </property>
+       <property name="text">
+        <string>Balance</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="value_equity">
+       <property name="styleSheet">
+        <string>color: #9C27B0; font-weight: bold; font-size: 14px;</string>
+       </property>
+       <property name="text">
+        <string>112 309.94</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_equity">
+       <property name="styleSheet">
+        <string>color: #9C27B0;</string>
+       </property>
+       <property name="text">
+        <string>Equity</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="horizontalSpacer">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QPushButton" name="button_balance">
+       <property name="styleSheet">
+        <string>
+         QPushButton {
+             background-color: #2D2D2D;
+             color: #FFFFFF;
+             border: none;
+             padding: 5px 15px;
+             border-radius: 2px;
+         }
+         QPushButton:hover {
+             background-color: #404040;
+         }
+         QPushButton[active="true"] {
+             background-color: #2196F3;
+         }
+        </string>
+       </property>
+       <property name="text">
+        <string>Balance</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="button_growth">
+       <property name="styleSheet">
+        <string>
+         QPushButton {
+             background-color: #2D2D2D;
+             color: #FFFFFF;
+             border: none;
+             padding: 5px 15px;
+             border-radius: 2px;
+         }
+         QPushButton:hover {
+             background-color: #404040;
+         }
+         QPushButton[active="true"] {
+             background-color: #2196F3;
+         }
+        </string>
+       </property>
+       <property name="text">
+        <string>Growth</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   
+   <!-- Line chart container -->
+   <item>
+    <widget class="QWidget" name="line_chart_container" native="true">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+</ui> 

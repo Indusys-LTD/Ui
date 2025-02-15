@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>100</x>
+    <y>100</y>
+    <width>1400</width>
+    <height>900</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Trading Dashboard</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <item>
+     <widget class="QTabWidget" name="tabWidget">
+      <property name="currentIndex">
+       <number>0</number>
+      </property>
+      <widget class="QWidget" name="tab_summary">
+       <attribute name="title">
+        <string>Summary</string>
+       </attribute>
+      </widget>
+      <widget class="QWidget" name="tab_profit_loss">
+       <attribute name="title">
+        <string>Profit &amp; Loss</string>
+       </attribute>
+      </widget>
+      <widget class="QWidget" name="tab_long_short">
+       <attribute name="title">
+        <string>Long &amp; Short</string>
+       </attribute>
+      </widget>
+      <widget class="QWidget" name="tab_symbols">
+       <attribute name="title">
+        <string>Symbols</string>
+       </attribute>
+      </widget>
+      <widget class="QWidget" name="tab_risks">
+       <attribute name="title">
+        <string>Risks</string>
+       </attribute>
+      </widget>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+ </widget>
+ <resources/>
+ <connections/>
+</ui> 

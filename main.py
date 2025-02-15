@@ -1,87 +1,81 @@
-import json
 import sys
-from PyQt5.QtWidgets import QApplication, QMainWindow
-from PyQt5 import uic
-from datetime import datetime
+from PySide6.QtWidgets import QApplication, QMainWindow, QTabWidget
+from PySide6.QtCore import QFile
+from PySide6.QtUiTools import QUiLoader
+from tabs.summary_tab import SummaryTab
+from tabs.risks_tab import RisksTab
 
-class TradingReport(QMainWindow):
+class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
-        uic.loadUi('gui.ui', self)
+        self.setWindowTitle("Trading Dashboard")
+        self.setGeometry(100, 100, 1400, 900)
+        self.setup_ui()
         
-        # Load initial data
-        self.load_data()
+    def setup_ui(self):
+        # Load UI
+        loader = QUiLoader()
+        ui_file = QFile("main.ui")
+        ui_file.open(QFile.ReadOnly)
+        self.central_widget = loader.load(ui_file)
+        ui_file.close()
         
-        # Connect buttons
-        self.generateBtn.clicked.connect(self.generate_report)
+        # Set central widget
+        self.setCentralWidget(self.central_widget)
         
-    def load_data(self):
-        try:
-            with open('data.json', 'r') as f:
-                self.data = json.load(f)
-        except FileNotFoundError:
-            self.data = self.get_default_data()
+        # Store reference to tab widget
+        self.tab_widget = self.central_widget.findChild(QTabWidget, "tabWidget")
+        
+        # Setup tabs
+        self.setup_tabs()
+        
+    def setup_tabs(self):
+        """Setup all tab widgets"""
+        # Remove placeholder tabs
+        while self.tab_widget.count():
+            self.tab_widget.removeTab(0)
             
-    def get_default_data(self):
-        return {
-            "account": {
-                "name": "Demo Account",
-                "currency": "EUR",
-                "type": "demo",
-                "broker": "MetaQuotes Ltd.",
-                "account": 90121026,
-                "digits": 2
-            },
-            "summary": {
-                "gain": 0.0,
-                "activity": 0.0,
-                "deposit": [0.0, 0],
-                "withdrawal": [0.0, 0],
-                "dividend": 0.0,
-                "correction": 0.0,
-                "credit": 0.0
-            }
-        }
+        # Summary tab
+        summary_tab = SummaryTab()
+        self.tab_widget.addTab(summary_tab, "Summary")
         
-    def generate_report(self):
-        # Get date range
-        start_date = self.startDate.date().toPyDate()
-        end_date = self.endDate.date().toPyDate()
-        
-        # Generate report data
-        report_data = self.generate_report_data(start_date, end_date)
-        
-        # Save report
-        self.save_report(report_data)
-        
-    def generate_report_data(self, start_date, end_date):
-        # Here you would add logic to generate the actual report data
-        # This is a simplified example
-        return {
-            "account": self.data["account"],
-            "summary": self.data["summary"],
-            "period": {
-                "start": start_date.strftime("%Y-%m-%d"),
-                "end": end_date.strftime("%Y-%m-%d")
-            }
-        }
-        
-    def save_report(self, report_data):
-        # Save as HTML report
-        with open('Report.html', 'r') as template:
-            html = template.read()
+        # Initialize summary data
+        summary_tab.update_metrics({
+            # Financial metrics
+            'gross_profit': 22.60,
+            'gross_loss': 10.3,
+            'swaps': -12.77,
+            'dividends': 0.00,
+            'commissions': 0.00,
+            'balance': 112381.77,
+            'equity': 112309.94,
             
-        # Insert report data
-        html = html.replace('window.__report = {}', 
-                          f'window.__report = {json.dumps(report_data)}')
-            
-        # Save generated report
-        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-        with open(f'report_{timestamp}.html', 'w') as f:
-            f.write(html)
+            # Progress bar metrics
+            'sharp_ratio': 0.65,
+            'max_drawdown': 10,
+            'profit_factor': 2.5,
+            'deposit_load': 92.5,
+            'recovery_factor': 2.49,
+            'trades_per_week': 2,
+            'average_hold_time': 6  # Added average hold time in hours
+        })
+        
+        # Risks tab
+        risks_tab = RisksTab()
+        self.tab_widget.addTab(risks_tab, "Risks")
+        
+        # Initialize risks data
+        risks_tab.update_metrics({
+            'sharp_ratio': 0,
+            'max_drawdown': 10,
+            'profit_factor': 2,
+            'deposit_load': 92,
+            'recovery_factor': 2,
+            'trades_per_week': 2
+        })
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
-    window = TradingReport()
+    window = MainWindow()
     window.show()
-    sys.exit(app.exec_())
+    sys.exit(app.exec())

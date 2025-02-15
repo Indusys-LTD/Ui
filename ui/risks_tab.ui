@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>RisksTab</class>
+ <widget class="QWidget" name="RisksTab">
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <layout class="QGridLayout" name="metrics_grid">
+     <!-- Sharp Ratio -->
+     <item row="0" column="0">
+      <widget class="QLabel" name="label_sharp_ratio">
+       <property name="text">
+        <string>Sharp Ratio</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <widget class="QProgressBar" name="progress_sharp_ratio">
+       <property name="maximum">
+        <number>5</number>
+       </property>
+       <property name="value">
+        <number>0</number>
+       </property>
+       <property name="format">
+        <string>%v</string>
+       </property>
+      </widget>
+     </item>
+     
+     <!-- Max Drawdown -->
+     <item row="0" column="2">
+      <widget class="QLabel" name="label_max_drawdown">
+       <property name="text">
+        <string>Max. Drawdown</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="3">
+      <widget class="QProgressBar" name="progress_max_drawdown">
+       <property name="maximum">
+        <number>100</number>
+       </property>
+       <property name="value">
+        <number>10</number>
+       </property>
+       <property name="format">
+        <string>%v%</string>
+       </property>
+      </widget>
+     </item>
+     
+     <!-- Profit Factor -->
+     <item row="1" column="0">
+      <widget class="QLabel" name="label_profit_factor">
+       <property name="text">
+        <string>Profit Factor</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1">
+      <widget class="QProgressBar" name="progress_profit_factor">
+       <property name="maximum">
+        <number>4</number>
+       </property>
+       <property name="value">
+        <number>2</number>
+       </property>
+       <property name="format">
+        <string>%v</string>
+       </property>
+      </widget>
+     </item>
+     
+     <!-- Max Deposit Load -->
+     <item row="1" column="2">
+      <widget class="QLabel" name="label_deposit_load">
+       <property name="text">
+        <string>Max. Deposit Load</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="3">
+      <widget class="QProgressBar" name="progress_deposit_load">
+       <property name="maximum">
+        <number>200</number>
+       </property>
+       <property name="value">
+        <number>92</number>
+       </property>
+       <property name="format">
+        <string>%v%</string>
+       </property>
+      </widget>
+     </item>
+     
+     <!-- Recovery Factor -->
+     <item row="2" column="0">
+      <widget class="QLabel" name="label_recovery_factor">
+       <property name="text">
+        <string>Recovery Factor</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="1">
+      <widget class="QProgressBar" name="progress_recovery_factor">
+       <property name="maximum">
+        <number>7</number>
+       </property>
+       <property name="value">
+        <number>2</number>
+       </property>
+       <property name="format">
+        <string>%v</string>
+       </property>
+      </widget>
+     </item>
+     
+     <!-- Trades per Week -->
+     <item row="2" column="2">
+      <widget class="QLabel" name="label_trades_per_week">
+       <property name="text">
+        <string>Trades per Week</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="3">
+      <widget class="QProgressBar" name="progress_trades_per_week">
+       <property name="maximum">
+        <number>830</number>
+       </property>
+       <property name="value">
+        <number>2</number>
+       </property>
+       <property name="format">
+        <string>%v</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <spacer name="verticalSpacer">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+    </spacer>
+   </item>
+  </layout>
+ </widget>
+</ui> 
