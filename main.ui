@@ -50,9 +50,9 @@
         <string>Long &amp; Short</string>
        </attribute>
       </widget>
-      <widget class="QWidget" name="tab_currency">
+      <widget class="QWidget" name="tab_portfolio">
        <attribute name="title">
-        <string>Currency</string>
+        <string>Portfolio</string>
        </attribute>
       </widget>
       <widget class="QWidget" name="tab_risks">

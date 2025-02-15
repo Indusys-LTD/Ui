@@ -6,7 +6,7 @@ from tabs.summary_tab import SummaryTab
 from tabs.risks_tab import RisksTab
 from tabs.profit_loss_tab import ProfitLossTab
 from tabs.long_short_tab import LongShortTab
-from tabs.currency_tab import CurrencyTab
+from tabs.portfolio_tab import PortfolioTab
 from tabs.overview_tab import OverviewTab
 from tabs.sequence_tab import SequenceTab
 from tabs.ai_tab import AITab
@@ -102,12 +102,12 @@ class MainWindow(QMainWindow):
             'win_trades_percent': 83.18
         })
         
-        # Currency tab
-        currency_tab = CurrencyTab()
-        self.central_widget.addTab(currency_tab, "Currency")
+        # Portfolio tab
+        portfolio_tab = PortfolioTab()
+        self.central_widget.addTab(portfolio_tab, "Portfolio")
         
-        # Initialize currency data
-        currency_tab.update_metrics({
+        # Initialize portfolio data
+        portfolio_tab.update_metrics({
             'total_value': 12381.77,
             'profit_factor': 2.20,
             'netto_profit': 12381.77,
