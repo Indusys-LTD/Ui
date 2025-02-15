@@ -17,15 +17,29 @@ class OverviewTab(QWidget):
         
     def setup_ui(self):
         main_layout = QVBoxLayout(self)
+        main_layout.setContentsMargins(10, 10, 10, 10)
+        main_layout.setSpacing(15)
         
-        # Account Selection and Setup
-        account_layout = QHBoxLayout()
+        # Top Controls Section
+        top_layout = QHBoxLayout()
         
-        # Account combo box
+        # Account Selection
         account_label = QLabel("Account:")
+        account_label.setStyleSheet("color: #FFFFFF;")
+        
         self.account_combo = QComboBox()
         self.account_combo.addItems(["Account 1 (Main)", "Account 2 (Demo)", "Account 3 (Test)"])
         self.account_combo.currentIndexChanged.connect(self.on_account_changed)
+        self.account_combo.setStyleSheet("""
+            QComboBox {
+                background-color: #2D2D2D;
+                color: #FFFFFF;
+                border: none;
+                padding: 5px 15px;
+                border-radius: 3px;
+                min-width: 150px;
+            }
+        """)
         
         # Setup account button
         self.setup_account_btn = QPushButton("Setup Account")
@@ -43,12 +57,33 @@ class OverviewTab(QWidget):
             }
         """)
         
-        account_layout.addWidget(account_label)
-        account_layout.addWidget(self.account_combo)
-        account_layout.addWidget(self.setup_account_btn)
-        account_layout.addStretch()
+        # Trading Control Buttons
+        self.trading_btn = QPushButton("Activate Trading")
+        self.buy_btn = QPushButton("Activate Buy")
+        self.sell_btn = QPushButton("Activate Sell")
         
-        main_layout.addLayout(account_layout)
+        # Set initial states
+        self.trading_active = False
+        self.buy_active = False
+        self.sell_active = False
+        
+        # Connect button signals
+        self.trading_btn.clicked.connect(self.toggle_trading)
+        self.buy_btn.clicked.connect(self.toggle_buy)
+        self.sell_btn.clicked.connect(self.toggle_sell)
+        
+        # Set button styles
+        self.update_button_styles()
+        
+        top_layout.addWidget(account_label)
+        top_layout.addWidget(self.account_combo)
+        top_layout.addWidget(self.setup_account_btn)
+        top_layout.addStretch()
+        top_layout.addWidget(self.trading_btn)
+        top_layout.addWidget(self.buy_btn)
+        top_layout.addWidget(self.sell_btn)
+        
+        main_layout.addLayout(top_layout)
         
         # Create splitter for flexible layout
         splitter = QSplitter(Qt.Horizontal)
@@ -58,8 +93,12 @@ class OverviewTab(QWidget):
         left_layout = QVBoxLayout(left_widget)
         
         # Account Metrics Section
-        metrics_frame = self.create_section("Account Metrics")
+        metrics_header = QLabel("Account Metrics")
+        metrics_header.setStyleSheet("font-size: 16px; font-weight: bold; color: #4CAF50;")
+        left_layout.addWidget(metrics_header)
+        
         metrics_grid = QGridLayout()
+        metrics_grid.setSpacing(20)
         
         self.metrics = {
             'balance': self.create_metric_widget("Balance:", "$125,432.50"),
@@ -79,12 +118,16 @@ class OverviewTab(QWidget):
                 col = 0
                 row += 1
                 
-        metrics_frame.layout().addLayout(metrics_grid)
-        left_layout.addWidget(metrics_frame)
+        left_layout.addLayout(metrics_grid)
+        left_layout.addSpacing(20)
         
         # Trading Ratios Section
-        ratios_frame = self.create_section("Trading Ratios")
+        ratios_header = QLabel("Trading Ratios")
+        ratios_header.setStyleSheet("font-size: 16px; font-weight: bold; color: #4CAF50;")
+        left_layout.addWidget(ratios_header)
+        
         ratios_grid = QGridLayout()
+        ratios_grid.setSpacing(20)
         
         self.ratios = {
             'sharp_ratio': self.create_metric_widget("Sharp Ratio:", "1.87"),
@@ -104,21 +147,25 @@ class OverviewTab(QWidget):
                 col = 0
                 row += 1
                 
-        ratios_frame.layout().addLayout(ratios_grid)
-        left_layout.addWidget(ratios_frame)
+        left_layout.addLayout(ratios_grid)
+        left_layout.addSpacing(20)
         
         # Account Growth Chart
-        growth_frame = self.create_section("Account Growth")
+        growth_header = QLabel("Account Growth")
+        growth_header.setStyleSheet("font-size: 16px; font-weight: bold; color: #4CAF50;")
+        left_layout.addWidget(growth_header)
+        
         self.growth_chart = LineChartWidget()
-        growth_frame.layout().addWidget(self.growth_chart.get_canvas())
-        left_layout.addWidget(growth_frame)
+        left_layout.addWidget(self.growth_chart.get_canvas())
         
         # Right side - Open positions and equity chart
         right_widget = QWidget()
         right_layout = QVBoxLayout(right_widget)
         
         # Open Positions Section
-        positions_frame = self.create_section("Open Positions")
+        positions_header = QLabel("Open Positions")
+        positions_header.setStyleSheet("font-size: 16px; font-weight: bold; color: #4CAF50;")
+        right_layout.addWidget(positions_header)
         
         self.positions_table = QTableWidget()
         self.positions_table.setColumnCount(7)
@@ -134,22 +181,27 @@ class OverviewTab(QWidget):
                 background-color: #1E1E1E;
                 alternate-background-color: #2D2D2D;
                 color: #FFFFFF;
+                border: none;
             }
             QHeaderView::section {
                 background-color: #333333;
                 color: #FFFFFF;
                 padding: 5px;
+                border: none;
+                border-bottom: 1px solid #3D3D3D;
             }
         """)
         
-        positions_frame.layout().addWidget(self.positions_table)
-        right_layout.addWidget(positions_frame)
+        right_layout.addWidget(self.positions_table)
+        right_layout.addSpacing(20)
         
         # Equity/Balance Chart
-        equity_frame = self.create_section("Equity/Balance")
+        equity_header = QLabel("Equity/Balance")
+        equity_header.setStyleSheet("font-size: 16px; font-weight: bold; color: #4CAF50;")
+        right_layout.addWidget(equity_header)
+        
         self.equity_chart = LineChartWidget()
-        equity_frame.layout().addWidget(self.equity_chart.get_canvas())
-        right_layout.addWidget(equity_frame)
+        right_layout.addWidget(self.equity_chart.get_canvas())
         
         # Add widgets to splitter
         splitter.addWidget(left_widget)
@@ -159,30 +211,12 @@ class OverviewTab(QWidget):
         
         main_layout.addWidget(splitter)
         
-    def create_section(self, title):
-        frame = QFrame()
-        frame.setFrameStyle(QFrame.StyledPanel)
-        frame.setStyleSheet("""
-            QFrame {
-                background-color: #2D2D2D;
-                border-radius: 10px;
-                margin: 5px;
-                padding: 10px;
-            }
-        """)
-        
-        layout = QVBoxLayout(frame)
-        
-        header = QLabel(title)
-        header.setStyleSheet("font-size: 16px; font-weight: bold; color: #4CAF50;")
-        layout.addWidget(header)
-        
-        return frame
-        
     def create_metric_widget(self, label_text, initial_value=""):
+        """Create a metric widget with label and value"""
         layout = QHBoxLayout()
         
         label = QLabel(label_text)
+        label.setStyleSheet("color: #AAAAAA;")
         value = QLabel(initial_value)
         value.setStyleSheet("color: #4CAF50; font-weight: bold;")
         
@@ -191,6 +225,60 @@ class OverviewTab(QWidget):
         layout.addStretch()
         
         return layout
+        
+    def toggle_trading(self):
+        """Toggle trading state"""
+        self.trading_active = not self.trading_active
+        self.update_button_styles()
+        
+    def toggle_buy(self):
+        """Toggle buy state"""
+        self.buy_active = not self.buy_active
+        self.update_button_styles()
+        
+    def toggle_sell(self):
+        """Toggle sell state"""
+        self.sell_active = not self.sell_active
+        self.update_button_styles()
+        
+    def update_button_styles(self):
+        """Update button styles based on their states"""
+        active_style = """
+            QPushButton {
+                background-color: #4CAF50;
+                color: white;
+                border: none;
+                padding: 5px 15px;
+                border-radius: 3px;
+                min-width: 120px;
+            }
+            QPushButton:hover {
+                background-color: #45a049;
+            }
+        """
+        
+        inactive_style = """
+            QPushButton {
+                background-color: #F44336;
+                color: white;
+                border: none;
+                padding: 5px 15px;
+                border-radius: 3px;
+                min-width: 120px;
+            }
+            QPushButton:hover {
+                background-color: #da190b;
+            }
+        """
+        
+        self.trading_btn.setStyleSheet(active_style if self.trading_active else inactive_style)
+        self.buy_btn.setStyleSheet(active_style if self.buy_active else inactive_style)
+        self.sell_btn.setStyleSheet(active_style if self.sell_active else inactive_style)
+        
+        # Update button text
+        self.trading_btn.setText("Trading Active" if self.trading_active else "Trading Inactive")
+        self.buy_btn.setText("Buy Active" if self.buy_active else "Buy Inactive")
+        self.sell_btn.setText("Sell Active" if self.sell_active else "Sell Inactive")
         
     def load_sample_data(self):
         self.update_positions()
