@@ -1,10 +1,11 @@
 from PySide6.QtWidgets import (QWidget, QVBoxLayout, QHBoxLayout, QComboBox, 
                                QLabel, QGridLayout, QTableWidget, QTableWidgetItem,
-                               QHeaderView, QFrame, QSplitter)
+                               QHeaderView, QFrame, QSplitter, QPushButton)
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QColor
 from widgets.bar_chart import BarChartWidget
 from widgets.line_chart import LineChartWidget
+from dialogs.account_setup_dialog import AccountSetupDialog
 import random
 from datetime import datetime, timedelta
 
@@ -17,14 +18,36 @@ class OverviewTab(QWidget):
     def setup_ui(self):
         main_layout = QVBoxLayout(self)
         
-        # Account Selection
+        # Account Selection and Setup
         account_layout = QHBoxLayout()
+        
+        # Account combo box
+        account_label = QLabel("Account:")
         self.account_combo = QComboBox()
         self.account_combo.addItems(["Account 1 (Main)", "Account 2 (Demo)", "Account 3 (Test)"])
         self.account_combo.currentIndexChanged.connect(self.on_account_changed)
-        account_layout.addWidget(QLabel("Account:"))
+        
+        # Setup account button
+        self.setup_account_btn = QPushButton("Setup Account")
+        self.setup_account_btn.clicked.connect(self.show_account_setup)
+        self.setup_account_btn.setStyleSheet("""
+            QPushButton {
+                background-color: #2196F3;
+                color: white;
+                border: none;
+                padding: 5px 15px;
+                border-radius: 3px;
+            }
+            QPushButton:hover {
+                background-color: #1976D2;
+            }
+        """)
+        
+        account_layout.addWidget(account_label)
         account_layout.addWidget(self.account_combo)
+        account_layout.addWidget(self.setup_account_btn)
         account_layout.addStretch()
+        
         main_layout.addLayout(account_layout)
         
         # Create splitter for flexible layout
@@ -275,3 +298,15 @@ class OverviewTab(QWidget):
             [balance, equity],
             ['#4CAF50', '#2196F3']  # Green for balance, Blue for equity
         ) 
+
+    def show_account_setup(self):
+        """Show the account setup dialog"""
+        dialog = AccountSetupDialog(self)
+        if dialog.exec() == AccountSetupDialog.Accepted:
+            account_data = dialog.get_account_data()
+            # Add the new account to the combo box
+            account_name = f"{account_data['login']} ({account_data['server']})"
+            self.account_combo.addItem(account_name)
+            # Select the new account
+            self.account_combo.setCurrentText(account_name)
+            # TODO: Save account data to persistent storage 
