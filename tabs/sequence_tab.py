@@ -82,92 +82,38 @@ class SequenceTab(QWidget):
         performance_section.layout().addWidget(self.performance_table)
         second_row.addWidget(performance_section, 1)
         
-        # Right side group for Cost and Session Analysis
-        right_group = QWidget()
-        right_layout = QVBoxLayout(right_group)
-        right_layout.setSpacing(5)
-        right_layout.setContentsMargins(0, 0, 0, 0)
+        # Best/Worst Sequence Analysis
+        sequence_section = self.create_section("Best/Worst Sequence Analysis")
+        self.sequence_table = self.create_table(["Metric", "Best Sequence", "Worst Sequence"])
+        sequence_section.layout().addWidget(self.sequence_table)
+        second_row.addWidget(sequence_section, 1)
+        
+        container_layout.addLayout(second_row)
         
         # Cost Analysis Summary
         cost_section = self.create_section("Cost Analysis Summary")
         self.cost_table = self.create_table(["Metric", "Value"])
         cost_section.layout().addWidget(self.cost_table)
-        right_layout.addWidget(cost_section)
+        container_layout.addWidget(cost_section)
         
-        # Market Session Performance
+        # Market Session Performance Analysis
         session_section = self.create_section("Market Session Performance Analysis")
         session_layout = QVBoxLayout()
         session_layout.setSpacing(5)
-        session_layout.setContentsMargins(0, 10, 0, 0)
         
-        # Create and configure session table
-        self.session_table = QTableWidget()
-        self.session_table.setColumnCount(5)
-        self.session_table.setHorizontalHeaderLabels([
+        # Create session table
+        self.session_table = self.create_table([
             "Session", "Total Trades", "Win Rate (%)", "Total Profit", "Avg Profit/Trade"
-        ])
-        
-        # Configure table properties
-        self.session_table.setMinimumHeight(150)  # Increased minimum height
-        self.session_table.setMaximumHeight(200)  # Added maximum height
-        self.session_table.setMinimumWidth(600)   # Added minimum width
-        self.session_table.setAlternatingRowColors(True)
-        self.session_table.verticalHeader().setVisible(False)
-        self.session_table.setShowGrid(True)
-        self.session_table.setFrameStyle(QFrame.Box | QFrame.Plain)  # Added frame
-        self.session_table.setLineWidth(1)
-        
-        # Set column widths and resize modes
-        self.session_table.horizontalHeader().setSectionResizeMode(0, QHeaderView.ResizeToContents)  # Session
-        self.session_table.horizontalHeader().setSectionResizeMode(1, QHeaderView.Fixed)  # Total Trades
-        self.session_table.horizontalHeader().setSectionResizeMode(2, QHeaderView.Fixed)  # Win Rate
-        self.session_table.horizontalHeader().setSectionResizeMode(3, QHeaderView.Stretch)  # Total Profit
-        self.session_table.horizontalHeader().setSectionResizeMode(4, QHeaderView.Stretch)  # Avg Profit/Trade
-        
-        self.session_table.setColumnWidth(1, 100)  # Total Trades width
-        self.session_table.setColumnWidth(2, 100)  # Win Rate width
-        
-        self.session_table.setStyleSheet("""
-            QTableWidget {
-                background-color: #1E1E1E;
-                alternate-background-color: #2D2D2D;
-                color: #FFFFFF;
-                gridline-color: #3D3D3D;
-                border: 1px solid #3D3D3D;
-            }
-            QHeaderView::section {
-                background-color: #333333;
-                color: #FFFFFF;
-                padding: 5px;
-                border: none;
-                border-bottom: 1px solid #3D3D3D;
-                font-weight: bold;
-            }
-            QTableWidget::item {
-                padding: 5px;
-                border: none;
-            }
-        """)
-        
+        ])        
         session_layout.addWidget(self.session_table)
         
-        # Best session label
+        # Add best session label
         self.best_session_label = QLabel()
         self.best_session_label.setStyleSheet("color: #4CAF50; padding: 5px 0;")
         session_layout.addWidget(self.best_session_label)
         
-        session_section.setLayout(session_layout)
-        right_layout.addWidget(session_section)
-        right_layout.addStretch()  # Add stretch at the bottom
-        
-        second_row.addWidget(right_group, 1)
-        container_layout.addLayout(second_row)
-        
-        # Best/Worst Sequence Analysis
-        sequence_section = self.create_section("Best/Worst Sequence Analysis")
-        self.sequence_table = self.create_table(["Metric", "Best Sequence", "Worst Sequence"])
-        sequence_section.layout().addWidget(self.sequence_table)
-        container_layout.addWidget(sequence_section)
+        session_section.layout().addLayout(session_layout)
+        container_layout.addWidget(session_section)
         
         # Active Sequences Detail
         active_section = self.create_section("Active Sequences Detail")
