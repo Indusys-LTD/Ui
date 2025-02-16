@@ -2,6 +2,8 @@ from PySide6.QtWidgets import QWidget, QVBoxLayout
 from PySide6.QtCore import QFile
 from PySide6.QtUiTools import QUiLoader
 from widgets import PieChartWidget, LineChartWidget
+import os
+import sys
 
 class SummaryTab(QWidget):
     def __init__(self, parent=None):
@@ -11,8 +13,18 @@ class SummaryTab(QWidget):
     def setup_ui(self):
         # Load UI
         loader = QUiLoader()
-        ui_file = QFile("ui/summary_tab.ui")
-        ui_file.open(QFile.ReadOnly)
+        # Get the directory where the script is located
+        if getattr(sys, 'frozen', False):
+            # If the application is run as a bundle
+            application_path = sys._MEIPASS
+        else:
+            # If the application is run from a Python interpreter
+            application_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+            
+        ui_file_path = os.path.join(application_path, "ui", "summary_tab.ui")
+        ui_file = QFile(ui_file_path)
+        if not ui_file.open(QFile.ReadOnly):
+            raise RuntimeError(f"Cannot open {ui_file_path}: {ui_file.errorString()}")
         self.tab_content = loader.load(ui_file)
         ui_file.close()
         

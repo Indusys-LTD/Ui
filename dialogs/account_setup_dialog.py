@@ -1,6 +1,6 @@
 from PySide6.QtWidgets import (QDialog, QVBoxLayout, QHBoxLayout, QLabel, 
                               QLineEdit, QSpinBox, QDoubleSpinBox, QPushButton,
-                              QFormLayout, QFrame, QComboBox)
+                              QFormLayout, QFrame, QComboBox, QCheckBox)
 from PySide6.QtCore import Qt
 
 class AccountSetupDialog(QDialog):
@@ -53,9 +53,34 @@ class AccountSetupDialog(QDialog):
         self.base_balance.setSingleStep(100)
         self.base_balance.setPrefix("$")
         
+        self.activate_ai = QCheckBox()
+        self.activate_ai.setStyleSheet("""
+            QCheckBox {
+                color: #FFFFFF;
+            }
+            QCheckBox::indicator {
+                width: 18px;
+                height: 18px;
+                background-color: #1E1E1E;
+                border: 1px solid #3D3D3D;
+                border-radius: 3px;
+            }
+            QCheckBox::indicator:checked {
+                background-color: #4CAF50;
+                border: 1px solid #4CAF50;
+            }
+            QCheckBox::indicator:checked:hover {
+                background-color: #45a049;
+            }
+            QCheckBox::indicator:hover {
+                border: 1px solid #4CAF50;
+            }
+        """)
+        
         params_layout.addRow("Max Positions:", self.max_positions)
         params_layout.addRow("Max Volume:", self.max_volume)
         params_layout.addRow("Base Balance:", self.base_balance)
+        params_layout.addRow("Activate AI:", self.activate_ai)
         
         params_frame.setLayout(params_layout)
         main_layout.addWidget(params_frame)
@@ -142,5 +167,6 @@ class AccountSetupDialog(QDialog):
             'server': self.server_combo.currentText(),
             'max_positions': self.max_positions.value(),
             'max_volume': self.max_volume.value(),
-            'base_balance': self.base_balance.value()
+            'base_balance': self.base_balance.value(),
+            'activate_ai': self.activate_ai.isChecked()
         } 

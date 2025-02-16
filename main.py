@@ -16,7 +16,7 @@ from tabs.strategy_tab import StrategyTab
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle("Trading Dashboard")
+        self.setWindowTitle("Slingshot")
         self.setGeometry(100, 100, 1400, 900)
         self.setup_ui()
         
@@ -136,6 +136,24 @@ class MainWindow(QMainWindow):
         # Database tab
         database_tab = DatabaseTab()
         self.central_widget.addTab(database_tab, "Database")
+
+class Threads:
+    def __init__(self):
+        self.ai_thread = None
+        self.trading_thread = None
+        self.threads = [self.ai_thread, self.trading_thread]
+        
+    def add_thread(self, thread):
+        self.threads.append(thread)
+        
+    def start_threads(self):
+        for thread in self.threads:
+            thread.start()
+            
+    def stop_threads(self):
+        for thread in self.threads:
+            thread.stop()
+
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)

@@ -1,0 +1,1 @@
+pyinstaller --onefile --noconsole --icon=Slingshot.ico --name=Slingshot --add-data "ui;ui" main.py
