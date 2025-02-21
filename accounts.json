@@ -1,0 +1,94 @@
+{
+    "accounts": [
+        {
+            "login": 5033517348,
+            "password": "Ah_lAuB3",
+            "server": "MetaQuotes-Demo"
+        },
+        {
+            "login": 90121035,
+            "password": "S_En3cNw",
+            "server": "MetaQuotes-Demo"
+        },
+        {
+            "login": 90121026,
+            "password": "*4AlDfUa",
+            "server": "MetaQuotes-Demo"
+        },
+        {
+            "login": 5033517327,
+            "password": "!8AaLhUh",
+            "server": "MetaQuotes-Demo"
+        },
+        {
+            "login": 10005560446,
+            "password": "Tg!lXqH1",
+            "server": "MetaQuotes-Demo"
+        },
+        {
+            "login": 90168390,
+            "password": "_2XsWvNp",
+            "server": "MetaQuotes-Demo"
+        },
+        {
+            "login": 90168444,
+            "password": "T-HeL3We",
+            "server": "MetaQuotes-Demo"
+        },
+        {
+            "login": 5033564020,
+            "password": "W@AqD1Do",
+            "server": "MetaQuotes-Demo"
+        },
+        {
+            "login": 5033564044,
+            "password": "4cGpUyM@",
+            "server": "MetaQuotes-Demo"
+        },
+        {
+            "login": 90168510,
+            "password": "-0HqQdHf",
+            "server": "MetaQuotes-Demo"
+        },
+        {
+            "login": 61325366,
+            "password": "Slingshot-2025",
+            "server": "Pepperstone-Demo"
+        },
+        {
+            "login": 61325368,
+            "password": "Slingshot-2025",
+            "server": "Pepperstone-Demo"
+        },
+        {
+            "login": 61325367,
+            "password": "Slingshot-2025",
+            "server": "Pepperstone-Demo"
+        },
+        {
+            "login": 61324588,
+            "password": "Slingshot-5000",
+            "server": "Pepperstone-Demo"
+        },
+        {
+            "login": 61324587,
+            "password": "Slingshot-4000",
+            "server": "Pepperstone-Demo"
+        },
+        {
+            "login": 61324586,
+            "password": "Slingshot-3000",
+            "server": "Pepperstone-Demo"
+        },
+        {
+            "login": 61324585,
+            "password": "Slingshot-2000",
+            "server": "Pepperstone-Demo"
+        },
+        {
+            "login": 61319575,
+            "password": "Slingshot-1000",
+            "server": "Pepperstone-Demo"
+        }
+    ]
+}
